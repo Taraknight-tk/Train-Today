@@ -1,61 +1,60 @@
-//
-//  ContentView.swift
-//  Train Today
-//
-//  Created by Tara Knight on 3/2/26.
-//
+// ContentView.swift
+// Train Today — Root Navigation Shell
+// Developed by Tara Knight | @Hopetheservicedoodle
 
 import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+
+    @Environment(AppState.self) private var appState
+    @Query private var profiles: [DogProfile]
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+        Group {
+            if profiles.isEmpty || !(profiles.first?.hasCompletedOnboarding ?? false) {
+                OnboardingView()
+            } else {
+                MainTabView()
             }
         }
     }
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+// MARK: - Main Tab View
+
+struct MainTabView: View {
+
+    @Environment(AppState.self) private var appState
+
+    var body: some View {
+        @Bindable var appState = appState
+        
+        TabView(selection: $appState.selectedTab) {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
+                }
+                .tag(AppState.TabItem.home)
+
+            SkillManagerView()
+                .tabItem {
+                    Label("Skills", systemImage: "list.bullet.clipboard.fill")
+                }
+                .tag(AppState.TabItem.skills)
+
+            ProgressView()
+                .tabItem {
+                    Label("Progress", systemImage: "chart.bar.fill")
+                }
+                .tag(AppState.TabItem.progress)
+
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+                .tag(AppState.TabItem.settings)
+        }
+        .tint(.ttPrimary)
+    }
 }
