@@ -373,7 +373,10 @@ struct OnboardingView: View {
                     .font(TTFont.headline)
                     .foregroundColor(.ttText)
             }
-            ForEach(DefaultSkillLibrary.skills(for: category), id: \.name) { template in
+            ForEach(DefaultSkillLibrary.skills(for: category).filter { template in
+                // For task skills, only show the ones the handler selected in step 3
+                category != .task || selectedTaskNames.contains(template.name)
+            }, id: \.name) { template in
                 HStack {
                     Text(template.name)
                         .font(TTFont.bodySmall)
