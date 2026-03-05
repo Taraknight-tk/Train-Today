@@ -15,11 +15,7 @@ struct TrainTodayApp: App {
 
     init() {
         do {
-            #if DEBUG
-            let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-            #else
             let configuration = ModelConfiguration()
-            #endif
 
             modelContainer = try ModelContainer(
                 for: DogProfile.self,

@@ -5,12 +5,12 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Schedule Settings View
+
 struct ScheduleSettingsView: View {
 
     @Query private var rules: [ScheduleRule]
     @Environment(\.modelContext) private var modelContext
-    @Environment(NotificationManager.self) private var notificationManager
-    @State private var expandedDay: Weekday? = nil
 
     private func ruleFor(_ weekday: Weekday) -> ScheduleRule? {
         rules.first { $0.weekday == weekday }
@@ -30,7 +30,12 @@ struct ScheduleSettingsView: View {
 
                 Section("Weekly Schedule") {
                     ForEach(Weekday.allCases) { weekday in
-                        dayRow(weekday)
+                        // Only render the row once the rule exists.
+                        // DayRowView owns its own isExpanded @State so parent
+                        // re-renders from @Query never collapse an open row.
+                        if let rule = ruleFor(weekday) {
+                            DayRowView(rule: rule)
+                        }
                     }
                 }
                 .listRowBackground(Color.ttSurface)
@@ -43,37 +48,49 @@ struct ScheduleSettingsView: View {
         .onAppear { ensureRulesExist() }
     }
 
-    // MARK: - Day Row
+    // MARK: - Ensure Rules Exist
 
-    @ViewBuilder
-    private func dayRow(_ weekday: Weekday) -> some View {
-        let rule = ruleFor(weekday)
-        let isExpanded = expandedDay == weekday
+    private func ensureRulesExist() {
+        guard rules.isEmpty else { return }
+        ScheduleRule.defaultRules().forEach { modelContext.insert($0) }
+        try? modelContext.save()
+    }
+}
 
+// MARK: - Day Row View
+// Each row owns its expansion state. When ScheduleSettingsView re-renders
+// after a @Query refresh, SwiftUI uses the Weekday.id identity from the
+// ForEach to preserve this view's @State, so isExpanded never resets.
+
+private struct DayRowView: View {
+
+    @Bindable var rule: ScheduleRule
+    @State private var isExpanded = false
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Summary row (always visible)
+
+            // Summary row — always visible
             Button {
                 withAnimation(.easeInOut(duration: 0.2)) {
-                    expandedDay = isExpanded ? nil : weekday
+                    isExpanded.toggle()
                 }
             } label: {
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(weekday.fullName)
+                        Text(rule.weekday.fullName)
                             .font(TTFont.body)
                             .foregroundColor(.ttText)
-                        if let r = rule {
-                            Text(r.maxMinutes == 0 ? "Rest day" : "\(r.maxMinutes) min max")
-                                .font(TTFont.caption)
-                                .foregroundColor(.ttTextSecondary)
-                        }
+                        Text(rule.maxMinutes == 0 ? "Rest day" : "\(rule.maxMinutes) min max")
+                            .font(TTFont.caption)
+                            .foregroundColor(.ttTextSecondary)
                     }
                     Spacer()
-                    if let r = rule, r.reminderEnabled {
+                    if rule.reminderEnabled {
                         HStack(spacing: 4) {
                             Image(systemName: "bell.fill")
                                 .font(.caption2)
-                            Text(r.reminderTimeLabel)
+                            Text(rule.reminderTimeLabel)
                                 .font(TTFont.caption)
                         }
                         .foregroundColor(.ttPrimary)
@@ -87,15 +104,26 @@ struct ScheduleSettingsView: View {
             .padding(.vertical, TTSpacing.xs)
 
             // Expanded controls
-            if isExpanded, let r = rule {
-                Divider().padding(.vertical, TTSpacing.xs)
-                dayControls(rule: r)
+            if isExpanded {
+                Divider().padding(.vertical, TTSpacing.xxs)
+                DayControlsView(rule: rule)
             }
         }
     }
+}
 
-    @ViewBuilder
-    private func dayControls(rule: ScheduleRule) -> some View {
+// MARK: - Day Controls View
+// @Bindable gives proper two-way access to the @Model object so SwiftUI
+// can track rule.maxMinutes in THIS view's body only, keeping renders
+// scoped and stable.
+
+private struct DayControlsView: View {
+
+    @Bindable var rule: ScheduleRule
+    @Environment(\.modelContext) private var modelContext
+    @Environment(NotificationManager.self) private var notificationManager
+
+    var body: some View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
 
             // Max minutes
@@ -109,6 +137,7 @@ struct ScheduleSettingsView: View {
                             rule.maxMinutes = mins
                             try? modelContext.save()
                         }
+                        .buttonStyle(.borderless)
                         .font(TTFont.caption)
                         .padding(.horizontal, TTSpacing.xs)
                         .padding(.vertical, 4)
@@ -126,11 +155,11 @@ struct ScheduleSettingsView: View {
                     .foregroundColor(.ttTextSecondary)
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: TTSpacing.xs) {
-                        // None option
                         Button("None") {
                             rule.priorityCategory = nil
                             try? modelContext.save()
                         }
+                        .buttonStyle(.borderless)
                         .font(TTFont.caption)
                         .padding(.horizontal, TTSpacing.xs)
                         .padding(.vertical, 4)
@@ -143,6 +172,7 @@ struct ScheduleSettingsView: View {
                                 rule.priorityCategory = cat
                                 try? modelContext.save()
                             }
+                            .buttonStyle(.borderless)
                             .font(TTFont.caption)
                             .padding(.horizontal, TTSpacing.xs)
                             .padding(.vertical, 4)
@@ -154,24 +184,21 @@ struct ScheduleSettingsView: View {
                 }
             }
 
-            // Reminder toggle
-            Toggle(isOn: Binding(
-                get: { rule.reminderEnabled },
-                set: { newValue in
-                    rule.reminderEnabled = newValue
-                    try? modelContext.save()
-                    if newValue {
-                        notificationManager.scheduleReminder(for: rule)
-                    } else {
-                        notificationManager.cancelReminder(for: rule.weekday)
-                    }
-                }
-            )) {
+            // Reminder toggle — $rule binding via @Bindable, side-effects via .onChange
+            Toggle(isOn: $rule.reminderEnabled) {
                 Text("Training reminder")
                     .font(TTFont.bodySmall)
                     .foregroundColor(.ttText)
             }
             .tint(.ttPrimary)
+            .onChange(of: rule.reminderEnabled) { _, newValue in
+                try? modelContext.save()
+                if newValue {
+                    notificationManager.scheduleReminder(for: rule)
+                } else {
+                    notificationManager.cancelReminder(for: rule.weekday)
+                }
+            }
 
             if rule.reminderEnabled {
                 HStack {
@@ -202,13 +229,5 @@ struct ScheduleSettingsView: View {
             }
         }
         .padding(.bottom, TTSpacing.sm)
-    }
-
-    // MARK: - Ensure Rules Exist
-
-    private func ensureRulesExist() {
-        guard rules.isEmpty else { return }
-        ScheduleRule.defaultRules().forEach { modelContext.insert($0) }
-        try? modelContext.save()
     }
 }
