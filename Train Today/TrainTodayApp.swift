@@ -9,32 +9,37 @@ import SwiftData
 @main
 struct TrainTodayApp: App {
 
-    let modelContainer: ModelContainer
-    @State private var appState = AppState()
-    @State private var notificationManager = NotificationManager()
+    let modelContainer: ModelContainer = {
+        let schema = Schema([
+            DogProfile.self,
+            Skill.self,
+            ScheduleRule.self,
+            TrainingSession.self,
+            TrainerImport.self
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
-    init() {
         do {
-            let configuration = ModelConfiguration()
-
-            modelContainer = try ModelContainer(
-                for: DogProfile.self,
-                     Skill.self,
-                     ScheduleRule.self,
-                     TrainingSession.self,
-                     TrainerImport.self,
-                configurations: configuration
-            )
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // Schema migration failed — wipe the local store and start fresh.
+            // This preserves app launch in development when models change.
+            // A production release would use a versioned SchemaMigrationPlan instead.
+            print("⚠️ ModelContainer failed to load (\(error)). Deleting store and rebuilding.")
+            let storeURL = modelConfiguration.url
+            try? FileManager.default.removeItem(at: storeURL)
+            // SQLite writes .store-shm and .store-wal sidecar files — clean those too
+            let base = storeURL.deletingLastPathComponent()
+            let name = storeURL.deletingPathExtension().lastPathComponent
+            try? FileManager.default.removeItem(at: base.appendingPathComponent("\(name).store-shm"))
+            try? FileManager.default.removeItem(at: base.appendingPathComponent("\(name).store-wal"))
+            return try! ModelContainer(for: schema, configurations: [modelConfiguration])
         }
-    }
+    }()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(appState)
-                .environment(notificationManager)
                 .modelContainer(modelContainer)
         }
     }

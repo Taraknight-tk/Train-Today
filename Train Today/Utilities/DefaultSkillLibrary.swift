@@ -12,6 +12,25 @@ struct SkillTemplate {
     let environment: SkillEnvironment
     let howToReminder: String
     let successMetric: String
+    let taskDisabilityGroup: TaskDisabilityGroup?
+
+    init(
+        name: String,
+        category: TrainingCategoryType,
+        importance: SkillImportance,
+        environment: SkillEnvironment,
+        howToReminder: String,
+        successMetric: String,
+        taskDisabilityGroup: TaskDisabilityGroup? = nil
+    ) {
+        self.name                = name
+        self.category            = category
+        self.importance          = importance
+        self.environment         = environment
+        self.howToReminder       = howToReminder
+        self.successMetric       = successMetric
+        self.taskDisabilityGroup = taskDisabilityGroup
+    }
 }
 
 struct DefaultSkillLibrary {
@@ -169,26 +188,33 @@ struct DefaultSkillLibrary {
             howToReminder: "Teach 'under' as a behavior at home using a low table or chair. Reward dog for tucking fully under. Practice holds up to 20 minutes.",
             successMetric: "Dog tucks completely under/beside a seat and holds settle for 20+ minutes."
         ),
+        SkillTemplate(
+            name: "Stair Navigation at Handler's Pace",
+            category: .publicAccess,
+            importance: .standard,
+            environment: .neighborhood,
+            howToReminder: "Practice on low, gentle stairs first. Use a verbal cue like 'easy' to signal slower pacing. Reward dog for matching your speed — not surging ahead or lagging. Gradually move to real-world stairs in public buildings.",
+            successMetric: "Dog ascends and descends stairs at handler's pace without pulling, rushing, or hesitating, 4/5 trials."
+        ),
     ]
 
     // MARK: - Task Training
+    // Tasks are grouped by disability type for onboarding display.
+    // Handlers select which tasks apply to their team during setup.
 
-    static let taskSkills: [SkillTemplate] = [
+    static let taskSkills: [SkillTemplate] = psychiatricTasks + mobilityTasks + medicalAlertTasks + dailyLivingTasks
+
+    // MARK: Psychiatric / Neurological Tasks
+
+    static let psychiatricTasks: [SkillTemplate] = [
         SkillTemplate(
             name: "Deep Pressure Therapy (DPT)",
             category: .task,
             importance: .critical,
             environment: .home,
             howToReminder: "Begin with dog placing chin or paw on your lap (lure and reward). Build duration before adding weight. Full DPT = dog lying across lap with sustained pressure.",
-            successMetric: "Dog applies and holds pressure on cue for 2+ minutes without prompting."
-        ),
-        SkillTemplate(
-            name: "Crowd Blocking",
-            category: .task,
-            importance: .critical,
-            environment: .fullPublic,
-            howToReminder: "Teach 'behind' (walking behind you), 'side' (pressing against your leg), and 'front' (standing in front to create distance). Use body language as cue.",
-            successMetric: "Dog moves to blocking position on cue and holds for 30+ seconds in public."
+            successMetric: "Dog applies and holds pressure on cue for 2+ minutes without prompting.",
+            taskDisabilityGroup: .psychiatric
         ),
         SkillTemplate(
             name: "Interrupt Repetitive Behavior",
@@ -196,7 +222,17 @@ struct DefaultSkillLibrary {
             importance: .critical,
             environment: .home,
             howToReminder: "Teach dog to nose-nudge or paw your hand. Shape the behavior using a target stick. Generalize from alert to actual interruption context.",
-            successMetric: "Dog interrupts handler's behavior on cue or spontaneously, 3/5 natural occurrences."
+            successMetric: "Dog interrupts handler's behavior on cue or spontaneously, 3/5 natural occurrences.",
+            taskDisabilityGroup: .psychiatric
+        ),
+        SkillTemplate(
+            name: "Crowd Blocking",
+            category: .task,
+            importance: .critical,
+            environment: .fullPublic,
+            howToReminder: "Teach 'behind' (walking behind you), 'side' (pressing against your leg), and 'front' (standing in front to create distance). Use body language as cue.",
+            successMetric: "Dog moves to blocking position on cue and holds for 30+ seconds in public.",
+            taskDisabilityGroup: .psychiatric
         ),
         SkillTemplate(
             name: "Tethering / Grounding",
@@ -204,7 +240,8 @@ struct DefaultSkillLibrary {
             importance: .standard,
             environment: .home,
             howToReminder: "Dog lies across your feet or stays in body contact on cue. Reward sustained contact. Use 'anchor' or 'ground' as a verbal cue.",
-            successMetric: "Dog holds grounding position for 5+ minutes on cue."
+            successMetric: "Dog holds grounding position for 5+ minutes on cue.",
+            taskDisabilityGroup: .psychiatric
         ),
         SkillTemplate(
             name: "Wake Handler",
@@ -212,15 +249,149 @@ struct DefaultSkillLibrary {
             importance: .standard,
             environment: .home,
             howToReminder: "Start from sit: cue 'wake up' and reward dog for nudging your arm or face. Transition to waking from a lying position. Avoid full jumping.",
-            successMetric: "Dog wakes handler reliably on cue without jumping or over-excitement."
+            successMetric: "Dog wakes handler reliably on cue without jumping or over-excitement.",
+            taskDisabilityGroup: .psychiatric
         ),
+        SkillTemplate(
+            name: "Anxiety Alert / Pre-Meltdown Interrupt",
+            category: .task,
+            importance: .critical,
+            environment: .home,
+            howToReminder: "Work with your trainer to identify early stress signals your dog can learn to recognize. Train an alert behavior (nose nudge, paw, chin rest) tied to those cues. Document the specific alert behavior in your notes.",
+            successMetric: "Dog alerts to escalating anxiety before handler reaches overwhelm threshold, 3/5 naturally occurring events.",
+            taskDisabilityGroup: .psychiatric
+        ),
+        SkillTemplate(
+            name: "Safe Space Escort",
+            category: .task,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Teach dog to lead you to a pre-designated 'safe spot' (e.g., bedroom or quiet area) on cue. Use 'go home' or 'safe spot.' Lure first, reward on arrival. Practice from different rooms.",
+            successMetric: "Dog leads handler to safe space on cue within 30 seconds, 4/5 trials.",
+            taskDisabilityGroup: .psychiatric
+        ),
+    ]
+
+    // MARK: Mobility / Physical Tasks
+
+    static let mobilityTasks: [SkillTemplate] = [
+        SkillTemplate(
+            name: "Pick Up Dropped Item",
+            category: .task,
+            importance: .critical,
+            environment: .home,
+            howToReminder: "Start with a high-value item like keys. Cue 'get it' and reward when dog picks it up. Then cue 'give' for a clean hand delivery. Generalize to different objects and floor surfaces.",
+            successMetric: "Dog retrieves a designated object from the floor and delivers to hand on a single cue, 5/5 times.",
+            taskDisabilityGroup: .mobility
+        ),
+        SkillTemplate(
+            name: "Leash Retrieval",
+            category: .task,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Place leash on the floor. Cue 'get your leash' and reward dog for picking it up and bringing it to your hand. Practice in different rooms and with leash in different positions.",
+            successMetric: "Dog retrieves and delivers leash to handler on cue, 4/5 times.",
+            taskDisabilityGroup: .mobility
+        ),
+        SkillTemplate(
+            name: "Brace / Counterbalance",
+            category: .task,
+            importance: .critical,
+            environment: .home,
+            howToReminder: "Must be trained with a certified trainer to protect the dog's spine. Dog learns to stand still while handler uses them for balance. Start with brief duration and short weight. Never practice without trainer sign-off on dog's readiness.",
+            successMetric: "Dog holds brace position steady while handler applies pressure, 5/5 times with trainer present.",
+            taskDisabilityGroup: .mobility
+        ),
+        SkillTemplate(
+            name: "Door Opening",
+            category: .task,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Teach 'touch' (nose or paw to target) first. Transfer target to door lever. Reward any movement, shape toward full open. Add 'open' as the verbal cue. Accessible loop handles work best.",
+            successMetric: "Dog opens a lever-style door on cue without jumping, 4/5 times.",
+            taskDisabilityGroup: .mobility
+        ),
+        SkillTemplate(
+            name: "Light Switch Toggle",
+            category: .task,
+            importance: .low,
+            environment: .home,
+            howToReminder: "Use a rocker-style switch. Teach dog to nose-target or paw a paddle. Shape the behavior in stages. Mark the moment the switch clicks — not the light change.",
+            successMetric: "Dog toggles light switch on or off on cue, 4/5 times.",
+            taskDisabilityGroup: .mobility
+        ),
+    ]
+
+    // MARK: Medical Alert Tasks
+
+    static let medicalAlertTasks: [SkillTemplate] = [
         SkillTemplate(
             name: "Custom Medical Alert",
             category: .task,
             importance: .critical,
             environment: .home,
             howToReminder: "Work with your trainer on scent or behavioral alert specific to your medical condition. Document the alert behavior and cue words in your notes.",
-            successMetric: "Defined by your trainer. Track repetitions and accuracy over sessions."
+            successMetric: "Defined by your trainer. Track repetitions and accuracy over sessions.",
+            taskDisabilityGroup: .medicalAlert
+        ),
+        SkillTemplate(
+            name: "Get Help — Find a Person",
+            category: .task,
+            importance: .critical,
+            environment: .home,
+            howToReminder: "Teach dog to find a specific person in the home by name ('find [person]'). Reward enthusiastic searching behavior and leading you to them. Generalize to finding any human when alone. Start in small spaces, increase difficulty.",
+            successMetric: "Dog finds and alerts a second person in the home when cued, 3/5 trials in varied locations.",
+            taskDisabilityGroup: .medicalAlert
+        ),
+        SkillTemplate(
+            name: "Retrieve Medication",
+            category: .task,
+            importance: .critical,
+            environment: .home,
+            howToReminder: "Use a designated medicine bag or pouch. Teach 'get my meds' paired with dog retrieving the bag from a set location. Ensure the bag is dog-safe (no breakable containers or loose pills). Practice from consistent spot first.",
+            successMetric: "Dog retrieves medication bag from designated location and delivers to hand on a single cue, 5/5 times.",
+            taskDisabilityGroup: .medicalAlert
+        ),
+        SkillTemplate(
+            name: "Seizure Response",
+            category: .task,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Must be trained with a certified trainer. Behaviors may include: staying with handler, activating alert device, going for help, or post-seizure DPT. Document specific trained response in notes.",
+            successMetric: "Defined by your trainer based on your specific seizure type and medical needs.",
+            taskDisabilityGroup: .medicalAlert
+        ),
+    ]
+
+    // MARK: Daily Living Support Tasks
+
+    static let dailyLivingTasks: [SkillTemplate] = [
+        SkillTemplate(
+            name: "General Fetch / Bring Object",
+            category: .task,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Teach a general 'get it' + 'bring it' retrieve chain. Use a variety of objects over time. Reward clean delivery to hand (not dropped at feet).",
+            successMetric: "Dog retrieves a named or pointed-to object and delivers to hand, 4/5 trials.",
+            taskDisabilityGroup: .dailyLiving
+        ),
+        SkillTemplate(
+            name: "Carry Items in Vest / Bag",
+            category: .task,
+            importance: .low,
+            environment: .neighborhood,
+            howToReminder: "Introduce saddle bags or vest gradually. Start with empty bags. Add light items once dog is comfortable with the gear. Never exceed 10% of dog's body weight.",
+            successMetric: "Dog walks comfortably with loaded vest for 15+ minutes without stress behaviors.",
+            taskDisabilityGroup: .dailyLiving
+        ),
+        SkillTemplate(
+            name: "Phone or Device Retrieval",
+            category: .task,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Use a dedicated rubber training dummy or inert device replica initially. Cue 'get my phone.' Reward delivery. Transition to the real device only after reliable retrieval with the dummy.",
+            successMetric: "Dog retrieves phone from floor or low surface and delivers to hand without damage, 4/5 times.",
+            taskDisabilityGroup: .dailyLiving
         ),
     ]
 

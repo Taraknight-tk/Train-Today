@@ -17,6 +17,7 @@ final class TrainingSession {
     var ratingRaw: String
     var notes: String
     var isQuickWin: Bool                // flagged if started from Quick Win mode
+    var isAdHoc: Bool = false           // flagged if logged retroactively via Quick Log; default gives SwiftData a migration value
 
     // MARK: - Typed Computed Properties
 
@@ -52,7 +53,8 @@ final class TrainingSession {
         skillCategory: TrainingCategoryType,
         rating: SessionRating,
         notes: String = "",
-        isQuickWin: Bool = false
+        isQuickWin: Bool = false,
+        isAdHoc: Bool = false
     ) {
         self.date               = date
         self.durationMinutes    = durationMinutes
@@ -61,5 +63,6 @@ final class TrainingSession {
         self.ratingRaw          = rating.rawValue
         self.notes              = notes
         self.isQuickWin         = isQuickWin
+        self.isAdHoc            = isAdHoc
     }
 }

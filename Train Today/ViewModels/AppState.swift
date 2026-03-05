@@ -52,6 +52,7 @@ final class AppState {
     enum ActiveSheet: Identifiable {
         case sessionLog(plan: SessionPlan)
         case quickWin
+        case quickLog
         case trainerImport
         case addSkill(category: TrainingCategoryType)
         case editSkill(skill: Skill)
@@ -60,6 +61,7 @@ final class AppState {
             switch self {
             case .sessionLog:             return "sessionLog"
             case .quickWin:               return "quickWin"
+            case .quickLog:               return "quickLog"
             case .trainerImport:          return "trainerImport"
             case .addSkill(let c):        return "addSkill_\(c.rawValue)"
             case .editSkill(let s):       return "editSkill_\(s.name)"

@@ -246,6 +246,39 @@ enum SessionRating: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Task Disability Group
+
+enum TaskDisabilityGroup: String, Codable, CaseIterable, Identifiable {
+    case psychiatric  = "Psychiatric / Neurological"
+    case mobility     = "Mobility / Physical"
+    case medicalAlert = "Medical Alert"
+    case dailyLiving  = "Daily Living Support"
+
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .psychiatric:  return "brain.head.profile"
+        case .mobility:     return "figure.roll"
+        case .medicalAlert: return "waveform.path.ecg"
+        case .dailyLiving:  return "hand.raised.fill"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .psychiatric:
+            return "Tasks supporting mental health, nervous system regulation, and neurological conditions."
+        case .mobility:
+            return "Tasks assisting with physical limitations, mobility aids, and independence."
+        case .medicalAlert:
+            return "Tasks alerting to medical events or retrieving help in an emergency."
+        case .dailyLiving:
+            return "Tasks supporting everyday independence, object retrieval, and safety."
+        }
+    }
+}
+
 // MARK: - Weekday
 
 enum Weekday: Int, Codable, CaseIterable, Identifiable {

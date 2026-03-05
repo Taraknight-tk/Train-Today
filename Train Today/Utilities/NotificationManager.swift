@@ -5,7 +5,7 @@
 // Developed by Tara Knight | @Hopetheservicedoodle
 
 import Foundation
-import UserNotifications
+@preconcurrency import UserNotifications
 import SwiftUI
 
 @MainActor
@@ -113,10 +113,10 @@ final class NotificationManager {
     /// Fires a one-time notification when a Critical skill hasn't been practiced in 7+ days.
     func scheduleCriticalSkillAlert(skillName: String) {
         let id = NotificationID.criticalSkillAlert(skillName: skillName)
+        let center = self.center
 
         // Only add if not already scheduled
-        center.getPendingNotificationRequests { [weak self] requests in
-            guard let self else { return }
+        center.getPendingNotificationRequests { requests in
             let alreadyScheduled = requests.contains { $0.identifier == id }
             guard !alreadyScheduled else { return }
 
@@ -133,7 +133,7 @@ final class NotificationManager {
 
             let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-            self.center.add(request)
+            center.add(request)
         }
     }
 

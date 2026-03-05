@@ -7,7 +7,7 @@ import SwiftData
 
 struct ContentView: View {
 
-    @Environment(AppState.self) private var appState
+    @State private var appState = AppState()
     @Query private var profiles: [DogProfile]
 
     var body: some View {
@@ -18,6 +18,7 @@ struct ContentView: View {
                 MainTabView()
             }
         }
+        .environment(appState)
     }
 }
 

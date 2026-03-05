@@ -6,10 +6,11 @@
 //  1. Welcome
 //  2. Dog Profile
 //  3. Training Categories
-//  4. Skill Inventory
-//  5. Schedule Preferences
-//  6. Handler Notes
-//  7. Disclaimer Acknowledgment
+//  4. Task Selection (skipped if Task Training not active)
+//  5. Skill Inventory
+//  6. Schedule Preferences
+//  7. Handler Notes
+//  8. Disclaimer Acknowledgment
 
 import SwiftUI
 import SwiftData
@@ -17,10 +18,10 @@ import SwiftData
 struct OnboardingView: View {
 
     @Environment(\.modelContext) private var modelContext
-    @Environment(NotificationManager.self) private var notificationManager
+    @State private var notificationManager = NotificationManager()
 
     @State private var currentStep: Int = 0
-    private let totalSteps = 7
+    private let totalSteps = 8
 
     // Dog profile fields
     @State private var dogName: String       = ""
@@ -35,6 +36,10 @@ struct OnboardingView: View {
 
     // Skill statuses set during onboarding
     @State private var skillStatuses: [String: SkillStatus] = [:]
+
+    // Tasks selected during onboarding (defaults to all tasks)
+    @State private var selectedTaskNames: Set<String> =
+        Set(DefaultSkillLibrary.taskSkills.map { $0.name })
 
     // Disclaimer
     @State private var disclaimerAcknowledged: Bool = false
@@ -54,10 +59,11 @@ struct OnboardingView: View {
                     welcomeStep.tag(0)
                     dogProfileStep.tag(1)
                     categoriesStep.tag(2)
-                    skillInventoryStep.tag(3)
-                    scheduleStep.tag(4)
-                    handlerNotesStep.tag(5)
-                    disclaimerStep.tag(6)
+                    taskSelectionStep.tag(3)       // NEW — skipped if Task Training not active
+                    skillInventoryStep.tag(4)
+                    scheduleStep.tag(5)
+                    handlerNotesStep.tag(6)
+                    disclaimerStep.tag(7)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.easeInOut(duration: 0.3), value: currentStep)
@@ -85,11 +91,17 @@ struct OnboardingView: View {
     // MARK: - Navigation Helpers
 
     private func nextStep() {
-        withAnimation { currentStep = min(currentStep + 1, totalSteps - 1) }
+        var next = currentStep + 1
+        // Skip step 3 (Task Selection) if Task Training category is not active
+        if next == 3 && !activeCategories.contains(.task) { next = 4 }
+        withAnimation { currentStep = min(next, totalSteps - 1) }
     }
 
     private func prevStep() {
-        withAnimation { currentStep = max(currentStep - 1, 0) }
+        var prev = currentStep - 1
+        // Skip step 3 going backwards too
+        if prev == 3 && !activeCategories.contains(.task) { prev = 2 }
+        withAnimation { currentStep = max(prev, 0) }
     }
 
     @ViewBuilder
@@ -231,7 +243,104 @@ struct OnboardingView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Step 3: Skill Inventory
+    // MARK: - Step 3: Task Selection
+
+    private var taskSelectionStep: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: TTSpacing.lg) {
+                stepHeader(
+                    emoji: "⭐️",
+                    title: "Which tasks does your dog do?",
+                    subtitle: "Select the tasks relevant to your disability. You can add or remove tasks any time in the Skills tab."
+                )
+
+                // Select All / Deselect All convenience
+                HStack {
+                    Button("Select All") {
+                        selectedTaskNames = Set(DefaultSkillLibrary.taskSkills.map { $0.name })
+                    }
+                    .buttonStyle(.borderless)
+                    .font(TTFont.bodySmall)
+                    .foregroundColor(.ttPrimary)
+
+                    Spacer()
+
+                    Button("Deselect All") {
+                        selectedTaskNames = []
+                    }
+                    .buttonStyle(.borderless)
+                    .font(TTFont.bodySmall)
+                    .foregroundColor(.ttTextSecondary)
+                }
+
+                // Tasks grouped by disability type
+                ForEach(TaskDisabilityGroup.allCases) { group in
+                    taskGroupSection(group)
+                }
+
+                navButtons()
+                    .padding(.bottom, TTSpacing.xl)
+            }
+            .padding(.horizontal, TTSpacing.md)
+            .padding(.top, TTSpacing.md)
+        }
+    }
+
+    @ViewBuilder
+    private func taskGroupSection(_ group: TaskDisabilityGroup) -> some View {
+        let tasks = DefaultSkillLibrary.taskSkills.filter { $0.taskDisabilityGroup == group }
+        if !tasks.isEmpty {
+            VStack(alignment: .leading, spacing: TTSpacing.sm) {
+                // Group header
+                HStack(spacing: TTSpacing.xs) {
+                    Image(systemName: group.icon)
+                        .font(.subheadline)
+                        .foregroundColor(.ttPrimary)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(group.rawValue)
+                            .font(TTFont.headline)
+                            .foregroundColor(.ttText)
+                        Text(group.description)
+                            .font(TTFont.caption)
+                            .foregroundColor(.ttTextSecondary)
+                    }
+                }
+
+                // Task rows
+                ForEach(tasks, id: \.name) { template in
+                    let isSelected = selectedTaskNames.contains(template.name)
+                    Button {
+                        if isSelected {
+                            selectedTaskNames.remove(template.name)
+                        } else {
+                            selectedTaskNames.insert(template.name)
+                        }
+                    } label: {
+                        HStack(spacing: TTSpacing.sm) {
+                            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(isSelected ? .ttPrimary : .ttSecondaryLight)
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(template.name)
+                                    .font(TTFont.bodySmall)
+                                    .foregroundColor(.ttText)
+                                Text(template.importance.rawValue)
+                                    .font(TTFont.caption)
+                                    .foregroundColor(.ttTextSecondary)
+                            }
+                            Spacer()
+                        }
+                        .padding(TTSpacing.sm)
+                        .background(isSelected ? Color.ttPrimary.opacity(0.08) : Color.ttSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    // MARK: - Step 4: Skill Inventory
 
     private var skillInventoryStep: some View {
         ScrollView {
@@ -434,6 +543,8 @@ struct OnboardingView: View {
         for category in TrainingCategoryType.allCases {
             guard activeCategories.contains(category) else { continue }
             for template in DefaultSkillLibrary.skills(for: category) {
+                // For Task Training, only seed tasks the handler selected in step 3
+                if category == .task && !selectedTaskNames.contains(template.name) { continue }
                 let status = skillStatuses[template.name] ?? .developing
                 let skill = Skill(
                     name: template.name,

@@ -8,7 +8,7 @@ import SwiftData
 struct SettingsView: View {
 
     @Query private var profiles: [DogProfile]
-    @Environment(NotificationManager.self) private var notificationManager
+    @State private var notificationManager = NotificationManager()
     @State private var showingDisclaimer  = false
     @State private var showingPrivacy     = false
     @State private var showingResetAlert  = false

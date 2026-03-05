@@ -42,6 +42,9 @@ struct HomeView: View {
                         // Generate button
                         generateButton
 
+                        // Quick Log — retroactive session entry
+                        quickLogButton
+
                         Spacer(minLength: TTSpacing.xxl)
                     }
                     .padding(.horizontal, TTSpacing.md)
@@ -64,6 +67,8 @@ struct HomeView: View {
                     if let plan = appState.currentPlan {
                         SessionPlanView(plan: plan, isQuickWin: true)
                     }
+                case .quickLog:
+                    QuickLogView()
                 default:
                     EmptyView()
                 }
@@ -230,6 +235,20 @@ struct HomeView: View {
         }
         .buttonStyle(TTPrimaryButtonStyle())
         .disabled(appState.isGeneratingPlan || skills.isEmpty)
+    }
+
+    // MARK: - Quick Log Button
+
+    private var quickLogButton: some View {
+        Button {
+            appState.activeSheet = .quickLog
+        } label: {
+            HStack(spacing: TTSpacing.xs) {
+                Image(systemName: "pencil.and.list.clipboard")
+                Text("Log a Past Session")
+            }
+        }
+        .buttonStyle(TTSecondaryButtonStyle())
     }
 
     // MARK: - Helpers

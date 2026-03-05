@@ -121,7 +121,7 @@ private struct DayControlsView: View {
 
     @Bindable var rule: ScheduleRule
     @Environment(\.modelContext) private var modelContext
-    @Environment(NotificationManager.self) private var notificationManager
+    @State private var notificationManager = NotificationManager()
 
     var body: some View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
