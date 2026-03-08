@@ -119,6 +119,14 @@ struct DefaultSkillLibrary {
             howToReminder: "Say dog's name once. The moment they orient toward you — mark and reward. Avoid repeating the name if no response. Reset and try again at closer range.",
             successMetric: "Dog orients immediately on name, 5/5 times with mild distraction."
         ),
+        SkillTemplate(
+            name: "Crate Training",
+            category: .obedience,
+            importance: .standard,
+            environment: .home,
+            howToReminder: "Build crate value gradually — toss treats in without closing the door first. Progress to closing briefly while you're visible, then out of sight. Use a cue like 'crate' or 'place.' Feed meals inside when possible. Never use the crate as punishment.",
+            successMetric: "Dog enters crate on cue and settles quietly for 1+ hour without vocalizing or pawing at the door."
+        ),
     ]
 
     // MARK: - Public Access

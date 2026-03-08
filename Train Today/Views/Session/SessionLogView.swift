@@ -16,6 +16,8 @@ struct SessionLogView: View {
     @State private var notes: String = ""
     @State private var isSaving: Bool = false
     @State private var showConfirmation: Bool = false
+    @State private var didCompletePrimary: Bool   = true   // optimistic — both on by default
+    @State private var didCompleteSecondary: Bool = true   // at least one must stay checked
 
     var body: some View {
         NavigationStack {
@@ -79,23 +81,76 @@ struct SessionLogView: View {
     // MARK: - Skill Recap
 
     private var skillRecap: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: TTSpacing.xxs) {
-                Text(plan.primarySkill.skill.name)
+        VStack(alignment: .leading, spacing: TTSpacing.sm) {
+
+            if plan.secondarySkill != nil {
+                Text("Which skills did you practice?")
+                    .font(TTFont.caption)
+                    .foregroundColor(.ttTextSecondary)
+                    .textCase(.uppercase)
+            }
+
+            // Primary skill — toggleable, but locked on if secondary is off
+            skillRecapRow(
+                item: plan.primarySkill,
+                label: didCompletePrimary ? "Practiced" : "Skipped",
+                isCompleted: didCompletePrimary,
+                // Can only deselect primary if secondary is still checked
+                isToggleable: didCompleteSecondary,
+                onToggle: { didCompletePrimary.toggle() }
+            )
+
+            // Secondary skill — toggleable, but locked on if primary is off
+            if let secondary = plan.secondarySkill {
+                Divider()
+                skillRecapRow(
+                    item: secondary,
+                    label: didCompleteSecondary ? "Also practiced" : "Skipped",
+                    isCompleted: didCompleteSecondary,
+                    // Can only deselect secondary if primary is still checked
+                    isToggleable: didCompletePrimary,
+                    onToggle: { didCompleteSecondary.toggle() }
+                )
+            }
+        }
+        .ttCard()
+    }
+
+    private func skillRecapRow(
+        item: SessionSkillItem,
+        label: String,
+        isCompleted: Bool,
+        isToggleable: Bool,
+        onToggle: @escaping () -> Void
+    ) -> some View {
+        HStack(spacing: TTSpacing.sm) {
+            // Checkmark / toggle indicator
+            Button(action: isToggleable ? onToggle : {}) {
+                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(isCompleted ? .ttPrimary : .ttSecondaryLight)
+                    .font(.title3)
+            }
+            .buttonStyle(.plain)
+            .disabled(!isToggleable)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(item.skill.name)
                     .font(TTFont.headline)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(isCompleted ? .ttText : .ttTextSecondary)
                 HStack(spacing: TTSpacing.xxs) {
-                    CategoryTag(category: plan.primarySkill.skill.category)
+                    CategoryTag(category: item.skill.category)
                     Text("·")
                         .foregroundColor(.ttTextSecondary)
-                    Text("~\(plan.primarySkill.suggestedMinutes) min")
+                    Text("~\(item.suggestedMinutes) min")
                         .font(TTFont.bodySmall)
                         .foregroundColor(.ttTextSecondary)
+                    Text("· \(label)")
+                        .font(TTFont.bodySmall)
+                        .foregroundColor(isCompleted ? .ttPrimary : .ttTextSecondary)
                 }
             }
             Spacer()
         }
-        .ttCard()
     }
 
     // MARK: - Rating Section
@@ -178,13 +233,20 @@ struct SessionLogView: View {
     // MARK: - Confirmation Overlay
 
     private var confirmationOverlay: some View {
-        VStack(spacing: TTSpacing.sm) {
+        var practicedNames: [String] = []
+        if didCompletePrimary   { practicedNames.append(plan.primarySkill.skill.name) }
+        if didCompleteSecondary, let secondary = plan.secondarySkill { practicedNames.append(secondary.skill.name) }
+        let confirmationText = practicedNames.count == 2
+            ? "Great work on \(practicedNames[0]) and \(practicedNames[1])."
+            : "Great work with \(practicedNames.first ?? "your session")."
+
+        return VStack(spacing: TTSpacing.sm) {
             Text("🌟")
                 .font(.system(size: 56))
             Text("Session logged!")
                 .font(TTFont.title)
                 .foregroundColor(.ttText)
-            Text("Great work with \(plan.primarySkill.skill.name).")
+            Text(confirmationText)
                 .font(TTFont.body)
                 .foregroundColor(.ttTextSecondary)
                 .multilineTextAlignment(.center)
@@ -198,20 +260,25 @@ struct SessionLogView: View {
     private func saveSession() {
         isSaving = true
 
-        // Update skill's lastPracticed date
-        plan.primarySkill.skill.lastPracticed = Date()
-        plan.secondarySkill?.skill.lastPracticed = Date()
+        // Build list of skills actually completed this session
+        var completedItems: [SessionSkillItem] = []
+        if didCompletePrimary   { completedItems.append(plan.primarySkill) }
+        if didCompleteSecondary, let secondary = plan.secondarySkill { completedItems.append(secondary) }
 
-        // Create log record
-        let session = TrainingSession(
-            durationMinutes: plan.totalMinutes,
-            skillName: plan.primarySkill.skill.name,
-            skillCategory: plan.primarySkill.skill.category,
-            rating: selectedRating,
-            notes: notes,
-            isQuickWin: plan.isQuickWin
-        )
-        modelContext.insert(session)
+        // Create one TrainingSession log entry per completed skill
+        let perSkillMinutes = max(1, plan.totalMinutes / completedItems.count)
+        for item in completedItems {
+            item.skill.lastPracticed = Date()
+            let session = TrainingSession(
+                durationMinutes: perSkillMinutes,
+                skillName: item.skill.name,
+                skillCategory: item.skill.category,
+                rating: selectedRating,
+                notes: notes,
+                isQuickWin: plan.isQuickWin
+            )
+            modelContext.insert(session)
+        }
 
         do {
             try modelContext.save()
