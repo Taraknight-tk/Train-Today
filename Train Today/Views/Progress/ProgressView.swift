@@ -129,7 +129,7 @@ struct ProgressView: View {
         return VStack(alignment: .leading, spacing: TTSpacing.xs) {
             HStack {
                 Image(systemName: category.icon)
-                    .foregroundColor(Color.forCategory(category))
+                    .foregroundColor(TTColor.forCategory(category))
                 Spacer()
             }
             Text(category.shortName)
@@ -146,11 +146,11 @@ struct ProgressView: View {
             // Simple recency bar
             ProgressBar(
                 value: recencyScore(for: category),
-                color: Color.forCategory(category)
+                color: TTColor.forCategory(category)
             )
         }
         .padding(TTSpacing.sm)
-        .background(Color.forCategory(category).opacity(0.07))
+        .background(TTColor.forCategory(category).opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
     }
 
@@ -228,7 +228,7 @@ struct SessionHistoryRow: View {
         HStack(spacing: TTSpacing.sm) {
             // Category color dot
             Circle()
-                .fill(Color.forCategory(session.skillCategory))
+                .fill(TTColor.forCategory(session.skillCategory))
                 .frame(width: 10, height: 10)
 
             VStack(alignment: .leading, spacing: 2) {

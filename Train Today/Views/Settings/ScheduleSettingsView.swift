@@ -176,7 +176,7 @@ private struct DayControlsView: View {
                             .font(TTFont.caption)
                             .padding(.horizontal, TTSpacing.xs)
                             .padding(.vertical, 4)
-                            .background(rule.priorityCategory == cat ? Color.forCategory(cat) : Color.ttSecondaryLight)
+                            .background(rule.priorityCategory == cat ? TTColor.forCategory(cat) : Color.ttSecondaryLight)
                             .foregroundColor(rule.priorityCategory == cat ? .white : .ttText)
                             .clipShape(Capsule())
                         }

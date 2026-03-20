@@ -169,7 +169,7 @@ struct QuickLogView: View {
                     }
                     .padding(.horizontal, TTSpacing.sm)
                     .padding(.vertical, TTSpacing.xxs + 2)
-                    .background(Color.forCategory(skill.category))
+                    .background(TTColor.forCategory(skill.category))
                     .clipShape(Capsule())
                 }
             }
@@ -211,7 +211,7 @@ struct QuickLogView: View {
                         HStack(spacing: TTSpacing.xs) {
                             Image(systemName: category.icon)
                                 .font(.caption)
-                                .foregroundColor(Color.forCategory(category))
+                                .foregroundColor(TTColor.forCategory(category))
                             Text(category.shortName)
                                 .font(TTFont.bodySmall)
                                 .foregroundColor(.ttTextSecondary)
@@ -234,7 +234,7 @@ struct QuickLogView: View {
         } label: {
             HStack(spacing: TTSpacing.sm) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isSelected ? Color.forCategory(skill.category) : .ttSecondaryLight)
+                    .foregroundColor(isSelected ? TTColor.forCategory(skill.category) : .ttSecondaryLight)
                     .font(.title3)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -248,12 +248,12 @@ struct QuickLogView: View {
                 Spacer()
             }
             .padding(TTSpacing.sm)
-            .background(isSelected ? Color.forCategory(skill.category).opacity(0.08) : Color.ttSurface)
+            .background(isSelected ? TTColor.forCategory(skill.category).opacity(0.08) : Color.ttSurface)
             .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
             .overlay(
                 RoundedRectangle(cornerRadius: TTRadius.sm)
                     .strokeBorder(
-                        isSelected ? Color.forCategory(skill.category).opacity(0.4) : Color.clear,
+                        isSelected ? TTColor.forCategory(skill.category).opacity(0.4) : Color.clear,
                         lineWidth: 1.5
                     )
             )

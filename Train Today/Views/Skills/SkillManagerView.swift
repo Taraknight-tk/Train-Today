@@ -77,7 +77,7 @@ struct SkillManagerView: View {
                         .padding(.horizontal, TTSpacing.sm)
                         .padding(.vertical, TTSpacing.xs)
                         .background(selectedCategory == category
-                            ? Color.forCategory(category)
+                            ? TTColor.forCategory(category)
                             : Color.ttSecondaryLight)
                         .foregroundColor(selectedCategory == category ? .white : .ttText)
                         .clipShape(Capsule())

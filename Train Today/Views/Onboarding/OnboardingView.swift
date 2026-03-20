@@ -223,7 +223,7 @@ struct OnboardingView: View {
             HStack(spacing: TTSpacing.md) {
                 Image(systemName: category.icon)
                     .font(.title2)
-                    .foregroundColor(isActive ? Color.forCategory(category) : .ttTextSecondary)
+                    .foregroundColor(isActive ? TTColor.forCategory(category) : .ttTextSecondary)
                     .frame(width: 32)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(category.rawValue)
@@ -236,7 +236,7 @@ struct OnboardingView: View {
                 }
                 Spacer()
                 Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isActive ? Color.forCategory(category) : .ttSecondaryLight)
+                    .foregroundColor(isActive ? TTColor.forCategory(category) : .ttSecondaryLight)
             }
             .ttCard()
         }
@@ -368,7 +368,7 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             HStack {
                 Image(systemName: category.icon)
-                    .foregroundColor(Color.forCategory(category))
+                    .foregroundColor(TTColor.forCategory(category))
                 Text(category.shortName)
                     .font(TTFont.headline)
                     .foregroundColor(.ttText)

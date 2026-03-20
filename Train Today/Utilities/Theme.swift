@@ -4,52 +4,74 @@
 
 import SwiftUI
 
-// MARK: - Brand Colors
+// MARK: - Color Namespace
+// To avoid symbol collisions across files, colors are namespaced under TTColor.
+enum TTColor {
+    // MARK: Brand Colors
+    /// Warm cream / deep warm brown — primary app background
+    static let background      = Color("ttBackground")
+    /// Sage green / lighter sage — primary brand color, buttons, accents
+    static let primary         = Color("ttPrimary")
+    /// Lighter sage / muted sage tint — secondary fills, selected states
+    static let primaryLight    = Color("ttPrimaryLight")
+    /// Warm taupe / lighter warm taupe — secondary UI elements, card borders
+    static let secondary       = Color("ttSecondary")
+    /// Soft taupe tint / dark secondary surface — card backgrounds, dividers
+    static let secondaryLight  = Color("ttSecondaryLight")
+    /// Near-black / warm near-white — body text, primary labels
+    static let text            = Color("ttText")
+    /// Mid-gray / warm light gray — secondary labels, placeholders
+    static let textSecondary   = Color("ttTextSecondary")
+    /// White / elevated dark surface — surface cards, modals
+    static let surface         = Color("ttSurface")
+    /// Warm red / lighter warm red — error states, destructive actions
+    static let error           = Color("ttError")
+    /// Warm amber / lighter amber — warnings, streak nudges
+    static let warning         = Color("ttWarning")
+    /// Deep sage / lighter sage — confirmation, success states
+    static let success         = Color("ttSuccess")
 
-extension Color {
-    /// Warm cream — primary background
-    static let ttBackground      = Color(hex: "#FAF7F2")
-    /// Muted sage green — primary brand color, buttons, accents
-    static let ttPrimary         = Color(hex: "#7C9A7E")
-    /// Lighter sage — secondary fills, selected states
-    static let ttPrimaryLight    = Color(hex: "#B2C9B4")
-    /// Warm taupe — secondary UI elements, card borders
-    static let ttSecondary       = Color(hex: "#C4A882")
-    /// Soft taupe tint — card backgrounds, dividers
-    static let ttSecondaryLight  = Color(hex: "#EDE5D8")
-    /// Near-black — body text, primary labels
-    static let ttText            = Color(hex: "#1C1C1E")
-    /// Mid-gray — secondary labels, placeholders
-    static let ttTextSecondary   = Color(hex: "#6B6B6B")
-    /// Warm white — surface cards, modals
-    static let ttSurface         = Color(hex: "#FFFFFF")
-    /// Soft warm red — error states, destructive actions
-    static let ttError           = Color(hex: "#C0392B")
-    /// Warm amber — warning, streak nudge
-    static let ttWarning         = Color(hex: "#D4A017")
-    /// Soft green confirmation
-    static let ttSuccess         = Color(hex: "#4A7C59")
-
-    // Dark mode variants are handled automatically via adaptive Color assets.
-    // For a production build, these should be migrated to an Asset Catalog
-    // with Light / Dark appearances defined.
-}
-
-// MARK: - Category Colors
-
-extension Color {
-    static let ttObedience       = Color(hex: "#7C9A7E")   // Sage green
-    static let ttPublicAccess    = Color(hex: "#7A9CB8")   // Dusty blue
-    static let ttTask            = Color(hex: "#C4A882")   // Warm taupe
-    static let ttRelationship    = Color(hex: "#B89AC4")   // Soft lavender
+    // MARK: Category Colors
+    static let obedience       = Color("ttObedience")    // Sage green — adaptive
+    static let publicAccess    = Color("ttPublicAccess") // Dusty blue — adaptive
+    static let task            = Color("ttTask")         // Warm taupe — adaptive
+    static let relationship    = Color("ttRelationship") // Soft lavender — adaptive
 
     static func forCategory(_ category: TrainingCategoryType) -> Color {
         switch category {
-        case .obedience:    return .ttObedience
-        case .publicAccess: return .ttPublicAccess
-        case .task:         return .ttTask
-        case .relationship: return .ttRelationship
+        case .obedience:    return TTColor.obedience
+        case .publicAccess: return TTColor.publicAccess
+        case .task:         return TTColor.task
+        case .relationship: return TTColor.relationship
         }
+    }
+}
+
+
+// MARK: Hex Color Helper
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a, r, g, b: UInt64
+        switch hex.count {
+        case 3:
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6:
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8:
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(
+            .sRGB,
+            red:   Double(r) / 255,
+            green: Double(g) / 255,
+            blue:  Double(b) / 255,
+            opacity: Double(a) / 255
+        )
     }
 }
 
@@ -98,10 +120,10 @@ struct TTRadius {
 
 extension View {
     func ttCardShadow() -> some View {
-        self.shadow(color: Color.ttText.opacity(0.06), radius: 8, x: 0, y: 2)
+        self.shadow(color: TTColor.text.opacity(0.06), radius: 8, x: 0, y: 2)
     }
     func ttElevatedShadow() -> some View {
-        self.shadow(color: Color.ttText.opacity(0.10), radius: 16, x: 0, y: 4)
+        self.shadow(color: TTColor.text.opacity(0.10), radius: 16, x: 0, y: 4)
     }
 }
 
@@ -113,7 +135,7 @@ struct TTCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(padding)
-            .background(Color.ttSurface)
+            .background(TTColor.surface)
             .clipShape(RoundedRectangle(cornerRadius: TTRadius.lg))
             .ttCardShadow()
     }
@@ -138,7 +160,7 @@ struct TTPrimaryButtonStyle: ButtonStyle {
             .padding(.vertical, TTSpacing.sm)
             .background(
                 RoundedRectangle(cornerRadius: TTRadius.md)
-                    .fill(isDestructive ? Color.ttError : Color.ttPrimary)
+                    .fill(isDestructive ? TTColor.error : TTColor.primary)
                     .opacity(configuration.isPressed ? 0.85 : 1.0)
             )
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
@@ -150,42 +172,15 @@ struct TTSecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(TTFont.headline)
-            .foregroundColor(.ttPrimary)
+            .foregroundColor(TTColor.primary)
             .frame(maxWidth: .infinity)
             .padding(.vertical, TTSpacing.sm)
             .background(
                 RoundedRectangle(cornerRadius: TTRadius.md)
-                    .strokeBorder(Color.ttPrimary, lineWidth: 1.5)
+                    .strokeBorder(TTColor.primary, lineWidth: 1.5)
             )
             .opacity(configuration.isPressed ? 0.7 : 1.0)
             .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
-// MARK: - Hex Color Helper
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let a, r, g, b: UInt64
-        switch hex.count {
-        case 3:
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6:
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8:
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
-        }
-        self.init(
-            .sRGB,
-            red:   Double(r) / 255,
-            green: Double(g) / 255,
-            blue:  Double(b) / 255,
-            opacity: Double(a) / 255
-        )
-    }
-}

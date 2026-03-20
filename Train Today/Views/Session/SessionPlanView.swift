@@ -165,7 +165,7 @@ struct SessionPlanView: View {
                         .foregroundColor(.ttText)
                 }
                 .padding(TTSpacing.sm)
-                .background(Color.forCategory(category).opacity(0.08))
+                .background(TTColor.forCategory(category).opacity(0.08))
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
             }
 
@@ -259,8 +259,8 @@ struct CategoryTag: View {
         }
         .padding(.horizontal, TTSpacing.sm)
         .padding(.vertical, TTSpacing.xxs)
-        .background(Color.forCategory(category).opacity(0.15))
-        .foregroundColor(Color.forCategory(category))
+        .background(TTColor.forCategory(category).opacity(0.15))
+        .foregroundColor(TTColor.forCategory(category))
         .clipShape(Capsule())
     }
 }
