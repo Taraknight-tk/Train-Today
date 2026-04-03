@@ -557,7 +557,8 @@ struct OnboardingView: View {
                     requiredEnvironment: template.environment,
                     howToReminder: template.howToReminder,
                     successMetric: template.successMetric,
-                    sortOrder: order
+                    sortOrder: order,
+                    minimumDurationMinutes: template.minimumDurationMinutes
                 )
                 modelContext.insert(skill)
                 order += 1

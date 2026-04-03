@@ -22,6 +22,7 @@ final class Skill {
     var isCustom: Bool              // true = handler-added, false = default library skill
     var sortOrder: Int              // for display ordering within a category
     var notes: String               // handler-specific notes on this skill
+    var minimumDurationMinutes: Int // 0 = no minimum; >0 = skill requires this many minutes (e.g. crate training = 60)
 
     // MARK: - Typed Computed Properties
 
@@ -85,7 +86,8 @@ final class Skill {
         isActive: Bool = true,
         isCustom: Bool = false,
         sortOrder: Int = 0,
-        notes: String = ""
+        notes: String = "",
+        minimumDurationMinutes: Int = 0
     ) {
         self.name                    = name
         self.categoryRaw             = category.rawValue
@@ -99,5 +101,6 @@ final class Skill {
         self.isCustom                = isCustom
         self.sortOrder               = sortOrder
         self.notes                   = notes
+        self.minimumDurationMinutes  = minimumDurationMinutes
     }
 }

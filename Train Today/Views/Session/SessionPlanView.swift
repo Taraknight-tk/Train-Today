@@ -3,6 +3,7 @@
 // Developed by Tara Knight | @Hopetheservicedoodle
 
 import SwiftUI
+import SwiftData
 
 struct SessionPlanView: View {
 
@@ -11,6 +12,15 @@ struct SessionPlanView: View {
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
     @State private var showingLog = false
+
+    @Query private var skills: [Skill]
+    @Query(sort: \TrainingSession.date, order: .reverse) private var sessions: [TrainingSession]
+    @Query private var scheduleRules: [ScheduleRule]
+
+    private var todayScheduleRule: ScheduleRule? {
+        let today = Weekday.today
+        return scheduleRules.first { $0.weekday == today }
+    }
 
     var body: some View {
         NavigationStack {
@@ -204,8 +214,12 @@ struct SessionPlanView: View {
             .buttonStyle(TTPrimaryButtonStyle())
 
             Button("Skip & Generate Another") {
-                appState.clearPlan()
                 dismiss()
+                appState.generatePlan(
+                    skills: Array(skills),
+                    sessions: Array(sessions),
+                    scheduleRule: todayScheduleRule
+                )
             }
             .buttonStyle(TTSecondaryButtonStyle())
         }

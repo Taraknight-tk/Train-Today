@@ -37,10 +37,25 @@ struct TrainTodayApp: App {
         }
     }()
 
+    @State private var isLoading = true
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .modelContainer(modelContainer)
+            if isLoading {
+                LoadingView()
+                    .modelContainer(modelContainer)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.4)) {
+                                isLoading = false
+                            }
+                        }
+                    }
+            } else {
+                ContentView()
+                    .modelContainer(modelContainer)
+            }
         }
     }
 }

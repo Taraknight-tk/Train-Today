@@ -13,6 +13,10 @@ struct SkillTemplate {
     let howToReminder: String
     let successMetric: String
     let taskDisabilityGroup: TaskDisabilityGroup?
+    /// Minimum session time required to include this skill (0 = no minimum).
+    /// Skills with a minimum > 0 are only scheduled for 30+ min sessions,
+    /// and the plan shows the full required duration rather than the default per-skill time.
+    let minimumDurationMinutes: Int
 
     init(
         name: String,
@@ -21,15 +25,17 @@ struct SkillTemplate {
         environment: SkillEnvironment,
         howToReminder: String,
         successMetric: String,
-        taskDisabilityGroup: TaskDisabilityGroup? = nil
+        taskDisabilityGroup: TaskDisabilityGroup? = nil,
+        minimumDurationMinutes: Int = 0
     ) {
-        self.name                = name
-        self.category            = category
-        self.importance          = importance
-        self.environment         = environment
-        self.howToReminder       = howToReminder
-        self.successMetric       = successMetric
-        self.taskDisabilityGroup = taskDisabilityGroup
+        self.name                    = name
+        self.category                = category
+        self.importance              = importance
+        self.environment             = environment
+        self.howToReminder           = howToReminder
+        self.successMetric           = successMetric
+        self.taskDisabilityGroup     = taskDisabilityGroup
+        self.minimumDurationMinutes  = minimumDurationMinutes
     }
 }
 
@@ -125,7 +131,8 @@ struct DefaultSkillLibrary {
             importance: .standard,
             environment: .home,
             howToReminder: "Build crate value gradually — toss treats in without closing the door first. Progress to closing briefly while you're visible, then out of sight. Use a cue like 'crate' or 'place.' Feed meals inside when possible. Never use the crate as punishment.",
-            successMetric: "Dog enters crate on cue and settles quietly for 1+ hour without vocalizing or pawing at the door."
+            successMetric: "Dog enters crate on cue and settles quietly for 1+ hour without vocalizing or pawing at the door.",
+            minimumDurationMinutes: 60
         ),
     ]
 

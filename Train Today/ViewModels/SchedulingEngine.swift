@@ -67,12 +67,18 @@ struct SchedulingEngine {
         // Determine category priority from schedule rule
         let priorityCategory = scheduleRule?.priorityCategory
 
-        // --- Step 2 & 3: Filter by location and energy ---
+        // --- Step 2 & 3: Filter by location, energy, and minimum duration ---
         let available = skills.filter { skill in
             guard skill.isActive else { return false }
             guard skill.requiredEnvironment.isAvailableIn(location) else { return false }
             // Low energy: exclude Beginner skills (new introductions) unless Critical
             if energy == .low && skill.status == .beginner && skill.importance != .critical {
+                return false
+            }
+            // Minimum duration: skills that require more time than a standard session
+            // (e.g. crate training = 60 min) only surface in 30+ min sessions.
+            // The "30+" tier is treated as open-ended, so any minimum is allowed there.
+            if skill.minimumDurationMinutes > 0 && effectiveDuration != .thirtyPlus {
                 return false
             }
             return true
@@ -121,13 +127,19 @@ struct SchedulingEngine {
         let candidates = Array(sorted.prefix(maxSkills))
 
         // Low-energy adjustment: for Critical skills on low-energy days,
-        // suggest a lighter version (3 calm reps) instead of a full session
+        // suggest a lighter version (3 calm reps) instead of a full session.
+        // Skills with a minimumDurationMinutes always use that value regardless.
         let primarySkill = candidates.first!
         let isAdjusted = energy == .low && primarySkill.importance == .critical
 
+        func suggestedTime(for skill: Skill, adjusted: Bool) -> Int {
+            if skill.minimumDurationMinutes > 0 { return skill.minimumDurationMinutes }
+            return adjusted ? min(5, minPerSkill) : minPerSkill
+        }
+
         let primaryItem = SessionSkillItem(
             skill: primarySkill,
-            suggestedMinutes: isAdjusted ? min(5, minPerSkill) : minPerSkill,
+            suggestedMinutes: suggestedTime(for: primarySkill, adjusted: isAdjusted),
             adjustedForLowEnergy: isAdjusted
         )
 
@@ -137,7 +149,7 @@ struct SchedulingEngine {
             let secAdjusted = energy == .low && secondary.importance == .critical
             secondaryItem = SessionSkillItem(
                 skill: secondary,
-                suggestedMinutes: secAdjusted ? min(5, minPerSkill) : minPerSkill,
+                suggestedMinutes: suggestedTime(for: secondary, adjusted: secAdjusted),
                 adjustedForLowEnergy: secAdjusted
             )
         }
