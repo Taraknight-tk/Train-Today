@@ -22,7 +22,7 @@ struct SessionLogView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: TTSpacing.lg) {
@@ -53,7 +53,7 @@ struct SessionLogView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
             .overlay {
@@ -70,10 +70,10 @@ struct SessionLogView: View {
         VStack(spacing: TTSpacing.xs) {
             Text("How did it go?")
                 .font(TTFont.display)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text("Every session counts, even the tough ones. 💙")
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
         }
     }
@@ -86,7 +86,7 @@ struct SessionLogView: View {
             if plan.secondarySkill != nil {
                 Text("Which skills did you practice?")
                     .font(TTFont.caption)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                     .textCase(.uppercase)
             }
 
@@ -127,7 +127,7 @@ struct SessionLogView: View {
             // Checkmark / toggle indicator
             Button(action: isToggleable ? onToggle : {}) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isCompleted ? .ttPrimaryInteractive : .ttSecondaryLight)
+                    .foregroundColor(isCompleted ? .accentInteractive : .fillSecondary)
                     .font(.title3)
             }
             .buttonStyle(.plain)
@@ -136,17 +136,17 @@ struct SessionLogView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.skill.name)
                     .font(TTFont.headline)
-                    .foregroundColor(isCompleted ? .ttText : .ttTextSecondary)
+                    .foregroundColor(isCompleted ? .textPrimary : .textSecondary)
                 HStack(spacing: TTSpacing.xxs) {
                     CategoryTag(category: item.skill.category)
                     Text("·")
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     Text("~\(item.suggestedMinutes) min")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     Text("· \(label)")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(isCompleted ? .ttPrimaryInteractive : .ttTextSecondary)
+                        .foregroundColor(isCompleted ? .accentInteractive : .textSecondary)
                 }
             }
             Spacer()
@@ -159,7 +159,7 @@ struct SessionLogView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             Text("How did it go?")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             HStack(spacing: TTSpacing.sm) {
                 ForEach(SessionRating.allCases) { rating in
@@ -179,11 +179,11 @@ struct SessionLogView: View {
                     .font(.title2)
                 Text(rating.rawValue)
                     .font(TTFont.caption)
-                    .foregroundColor(selectedRating == rating ? .white : .ttText)
+                    .foregroundColor(selectedRating == rating ? .white : .textPrimary)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, TTSpacing.sm)
-            .background(selectedRating == rating ? TTColor.primaryInteractive : Color.ttSecondaryLight)
+            .background(selectedRating == rating ? Color.accentInteractive : Color.fillSecondary)
             .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
         }
         .buttonStyle(.plain)
@@ -195,16 +195,16 @@ struct SessionLogView: View {
         VStack(alignment: .leading, spacing: TTSpacing.xs) {
             Text("Notes (optional)")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text("What did you notice? Anything to remember for next time?")
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
 
             TextEditor(text: $notes)
                 .font(TTFont.body)
                 .frame(minHeight: 100)
                 .padding(TTSpacing.xs)
-                .background(Color.ttSecondaryLight)
+                .background(Color.fillSecondary)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
                 .scrollContentBackground(.hidden)
         }
@@ -245,14 +245,14 @@ struct SessionLogView: View {
                 .font(.system(size: 56))
             Text("Session logged!")
                 .font(TTFont.title)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text(confirmationText)
                 .font(TTFont.body)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.ttBackground.opacity(0.95))
+        .background(Color.background.opacity(0.95))
     }
 
     // MARK: - Save Logic

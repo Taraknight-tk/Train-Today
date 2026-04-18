@@ -16,14 +16,14 @@ struct SkillManagerView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // Category tab bar
                     categoryTabBar
                         .padding(.horizontal, TTSpacing.md)
                         .padding(.vertical, TTSpacing.sm)
-                        .background(Color.ttBackground)
+                        .background(Color.background)
 
                     Divider()
 
@@ -39,7 +39,7 @@ struct SkillManagerView: View {
                         showingAddSkill = true
                     } label: {
                         Image(systemName: "plus")
-                            .foregroundColor(.ttPrimaryInteractive)
+                            .foregroundColor(.accentInteractive)
                     }
                 }
             }
@@ -78,8 +78,8 @@ struct SkillManagerView: View {
                         .padding(.vertical, TTSpacing.xs)
                         .background(selectedCategory == category
                             ? TTColor.forCategory(category)
-                            : Color.ttSecondaryLight)
-                        .foregroundColor(.ttText)
+                            : Color.fillSecondary)
+                        .foregroundColor(.textPrimary)
                         .clipShape(Capsule())
                     }
                 }
@@ -101,12 +101,12 @@ struct SkillManagerView: View {
                         SkillRowView(skill: skill)
                             .contentShape(Rectangle())
                             .onTapGesture { skillToEdit = skill }
-                            .listRowBackground(Color.ttBackground)
-                            .listRowSeparatorTint(Color.ttSecondaryLight)
+                            .listRowBackground(Color.background)
+                            .listRowSeparatorTint(Color.fillSecondary)
                     }
                 }
                 .listStyle(.plain)
-                .background(Color.ttBackground)
+                .background(Color.background)
                 .scrollContentBackground(.hidden)
             }
         }
@@ -118,13 +118,13 @@ struct SkillManagerView: View {
         VStack(spacing: TTSpacing.md) {
             Image(systemName: selectedCategory.icon)
                 .font(.system(size: 48))
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text("No \(selectedCategory.shortName) skills yet")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text("Tap + to add your first skill in this category.")
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
             Button("Add Skill") {
                 showingAddSkill = true
@@ -155,52 +155,52 @@ struct SkillRowView: View {
                 HStack {
                     Text(skill.name)
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Spacer()
                     if skill.importance == .critical {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .font(.caption)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                     }
                     if skill.isCriticalOverdue {
                         Text("OVERDUE")
                             .font(TTFont.tag)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(Color.ttWarning.opacity(0.15))
-                            .foregroundColor(.ttText)
+                            .background(Color.warning.opacity(0.15))
+                            .foregroundColor(.textPrimary)
                             .clipShape(Capsule())
                     }
                 }
                 HStack(spacing: TTSpacing.xs) {
                     Text(skill.status.rawValue)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     Text("·")
-                        .foregroundColor(.ttSecondaryLight)
+                        .foregroundColor(.fillSecondary)
                     Text(skill.recencyLabel)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     Text("·")
-                        .foregroundColor(.ttSecondaryLight)
+                        .foregroundColor(.fillSecondary)
                     Image(systemName: skill.requiredEnvironment.icon)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
 
             Image(systemName: "chevron.right")
                 .font(.caption)
-                .foregroundColor(.ttSecondaryLight)
+                .foregroundColor(.fillSecondary)
         }
         .padding(.vertical, TTSpacing.xs)
     }
 
     private var statusColor: Color {
         switch skill.status {
-        case .beginner:    return .ttWarning
-        case .developing:  return TTColor.primaryInteractive
-        case .maintaining: return .ttSuccess
+        case .beginner:    return .warning
+        case .developing:  return Color.accentInteractive
+        case .maintaining: return .success
         }
     }
 }
@@ -230,7 +230,7 @@ struct EditSkillView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 Form {
                     Section("Skill Details") {
@@ -241,7 +241,7 @@ struct EditSkillView: View {
                             }
                         }
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     Section("Training Level") {
                         Picker("Status", selection: $status) {
@@ -260,7 +260,7 @@ struct EditSkillView: View {
                             }
                         }
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     Section("Training Guidance") {
                         TextField("How to practice this skill", text: $howTo, axis: .vertical)
@@ -268,13 +268,13 @@ struct EditSkillView: View {
                         TextField("You're done when…", text: $successMetric, axis: .vertical)
                             .lineLimit(2...4)
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     Section("Notes") {
                         TextField("Your private notes on this skill", text: $notes, axis: .vertical)
                             .lineLimit(2...6)
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     if isEditing {
                         Section {
@@ -286,22 +286,22 @@ struct EditSkillView: View {
                                 }
                             }
                         }
-                        .listRowBackground(Color.ttSurface)
+                        .listRowBackground(Color.surface)
                     }
                 }
                 .scrollContentBackground(.hidden)
-                .background(Color.ttBackground)
+                .background(Color.background)
             }
             .navigationTitle(isEditing ? "Edit Skill" : "Add Skill")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") { dismiss() }
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") { saveSkill() }
-                        .foregroundColor(.ttPrimaryInteractive)
+                        .foregroundColor(.accentInteractive)
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }

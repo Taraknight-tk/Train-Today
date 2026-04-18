@@ -17,7 +17,7 @@ struct HomeView: View {
         @Bindable var appState = appState
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: TTSpacing.lg) {
@@ -56,7 +56,7 @@ struct HomeView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Train Today")
                         .font(TTFont.headline)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                 }
             }
             .sheet(item: $appState.activeSheet) { sheet in
@@ -83,11 +83,11 @@ struct HomeView: View {
             VStack(alignment: .leading, spacing: TTSpacing.xxs) {
                 Text(greetingText)
                     .font(TTFont.display)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 if let dog = profiles.first {
                     Text("Training with \(dog.name) 🐾")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
             Spacer()
@@ -114,14 +114,14 @@ struct HomeView: View {
                 .font(.title2)
             Text("\(streak)")
                 .font(TTFont.headline)
-                .foregroundColor(.ttPrimaryInteractive)
+                .foregroundColor(.accentInteractive)
             Text(streak == 1 ? "day" : "days")
                 .font(TTFont.caption)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
         }
         .padding(.horizontal, TTSpacing.sm)
         .padding(.vertical, TTSpacing.xs)
-        .background(Color.ttSecondaryLight)
+        .background(Color.fillSecondary)
         .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
     }
 
@@ -135,15 +135,15 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Quick Win Mode")
                         .font(TTFont.headline)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Text("5 minutes · one easy skill · confidence boost")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
                 Spacer()
                 Image(systemName: "bolt.fill")
                     .font(.title2)
-                    .foregroundColor(.ttPrimaryInteractive)
+                    .foregroundColor(.accentInteractive)
             }
             .ttCard()
         }
@@ -156,21 +156,21 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: TTSpacing.md) {
             Text("Today's Session")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             // Time
             inputRow(title: "Time available") {
                 SessionDurationPicker(selected: appState.selectedDuration)
             }
 
-            Divider().background(Color.ttSecondaryLight)
+            Divider().background(Color.fillSecondary)
 
             // Energy
             inputRow(title: "Energy today") {
                 EnergyPicker(selected: appState.selectedEnergy)
             }
 
-            Divider().background(Color.ttSecondaryLight)
+            Divider().background(Color.fillSecondary)
 
             // Location
             inputRow(title: "Where are you?") {
@@ -185,7 +185,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: TTSpacing.xs) {
             Text(title)
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
             content()
         }
     }
@@ -200,14 +200,14 @@ struct HomeView: View {
                 ForEach(overdue) { skill in
                     HStack(spacing: TTSpacing.xs) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text("\(skill.name) is overdue (Critical · \(skill.recencyLabel))")
                             .font(TTFont.bodySmall)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Spacer()
                     }
                     .padding(TTSpacing.sm)
-                    .background(Color.ttWarning.opacity(0.10))
+                    .background(Color.warning.opacity(0.10))
                     .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
                 }
             }
@@ -273,8 +273,8 @@ struct SessionDurationPicker: View {
                 .font(TTFont.bodySmall)
                 .padding(.horizontal, TTSpacing.sm)
                 .padding(.vertical, TTSpacing.xxs + 2)
-                .background(selected == duration ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                .foregroundColor(selected == duration ? .white : .ttText)
+                .background(selected == duration ? Color.accentInteractive : Color.fillSecondary)
+                .foregroundColor(selected == duration ? .white : .textPrimary)
                 .clipShape(Capsule())
             }
         }
@@ -297,8 +297,8 @@ struct EnergyPicker: View {
                     }
                     .padding(.horizontal, TTSpacing.sm)
                     .padding(.vertical, TTSpacing.xxs + 2)
-                    .background(selected == level ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                    .foregroundColor(selected == level ? .white : .ttText)
+                    .background(selected == level ? Color.accentInteractive : Color.fillSecondary)
+                    .foregroundColor(selected == level ? .white : .textPrimary)
                     .clipShape(Capsule())
                 }
             }
@@ -323,8 +323,8 @@ struct LocationPicker: View {
                         }
                         .padding(.horizontal, TTSpacing.sm)
                         .padding(.vertical, TTSpacing.xxs + 2)
-                        .background(selected == env ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                        .foregroundColor(selected == env ? .white : .ttText)
+                        .background(selected == env ? Color.accentInteractive : Color.fillSecondary)
+                        .foregroundColor(selected == env ? .white : .textPrimary)
                         .clipShape(Capsule())
                     }
                 }

@@ -18,14 +18,14 @@ struct ScheduleSettingsView: View {
 
     var body: some View {
         ZStack {
-            Color.ttBackground.ignoresSafeArea()
+            Color.background.ignoresSafeArea()
 
             List {
                 Section {
                     Text("Set your training preferences for each day. The app uses these to adjust your session plans automatically.")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
-                        .listRowBackground(Color.ttBackground)
+                        .foregroundColor(.textSecondary)
+                        .listRowBackground(Color.background)
                 }
 
                 Section("Weekly Schedule") {
@@ -38,10 +38,10 @@ struct ScheduleSettingsView: View {
                         }
                     }
                 }
-                .listRowBackground(Color.ttSurface)
+                .listRowBackground(Color.surface)
             }
             .scrollContentBackground(.hidden)
-            .background(Color.ttBackground)
+            .background(Color.background)
         }
         .navigationTitle("Schedule")
         .navigationBarTitleDisplayMode(.inline)
@@ -80,10 +80,10 @@ private struct DayRowView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(rule.weekday.fullName)
                             .font(TTFont.body)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text(rule.maxMinutes == 0 ? "Rest day" : "\(rule.maxMinutes) min max")
                             .font(TTFont.caption)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                     }
                     Spacer()
                     if rule.reminderEnabled {
@@ -93,11 +93,11 @@ private struct DayRowView: View {
                             Text(rule.reminderTimeLabel)
                                 .font(TTFont.caption)
                         }
-                        .foregroundColor(.ttPrimaryInteractive)
+                        .foregroundColor(.accentInteractive)
                     }
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
             .buttonStyle(.plain)
@@ -130,7 +130,7 @@ private struct DayControlsView: View {
             VStack(alignment: .leading, spacing: TTSpacing.xxs) {
                 Text("Max session length")
                     .font(TTFont.caption)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                 HStack(spacing: TTSpacing.xs) {
                     ForEach([0, 5, 10, 15, 20, 30], id: \.self) { mins in
                         Button(mins == 0 ? "Rest" : "\(mins)m") {
@@ -141,8 +141,8 @@ private struct DayControlsView: View {
                         .font(TTFont.caption)
                         .padding(.horizontal, TTSpacing.xs)
                         .padding(.vertical, 4)
-                        .background(rule.maxMinutes == mins ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                        .foregroundColor(rule.maxMinutes == mins ? .white : .ttText)
+                        .background(rule.maxMinutes == mins ? Color.accentInteractive : Color.fillSecondary)
+                        .foregroundColor(rule.maxMinutes == mins ? .white : .textPrimary)
                         .clipShape(Capsule())
                     }
                 }
@@ -152,7 +152,7 @@ private struct DayControlsView: View {
             VStack(alignment: .leading, spacing: TTSpacing.xxs) {
                 Text("Priority category (optional)")
                     .font(TTFont.caption)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: TTSpacing.xs) {
                         Button("None") {
@@ -163,8 +163,8 @@ private struct DayControlsView: View {
                         .font(TTFont.caption)
                         .padding(.horizontal, TTSpacing.xs)
                         .padding(.vertical, 4)
-                        .background(rule.priorityCategory == nil ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                        .foregroundColor(rule.priorityCategory == nil ? .white : .ttText)
+                        .background(rule.priorityCategory == nil ? Color.accentInteractive : Color.fillSecondary)
+                        .foregroundColor(rule.priorityCategory == nil ? .white : .textPrimary)
                         .clipShape(Capsule())
 
                         ForEach(TrainingCategoryType.allCases) { cat in
@@ -176,8 +176,8 @@ private struct DayControlsView: View {
                             .font(TTFont.caption)
                             .padding(.horizontal, TTSpacing.xs)
                             .padding(.vertical, 4)
-                            .background(rule.priorityCategory == cat ? TTColor.forCategory(cat) : Color.ttSecondaryLight)
-                            .foregroundColor(rule.priorityCategory == cat ? .ttText : .ttText)
+                            .background(rule.priorityCategory == cat ? TTColor.forCategory(cat) : Color.fillSecondary)
+                            .foregroundColor(rule.priorityCategory == cat ? .textPrimary : .textPrimary)
                             .clipShape(Capsule())
                         }
                     }
@@ -188,9 +188,9 @@ private struct DayControlsView: View {
             Toggle(isOn: $rule.reminderEnabled) {
                 Text("Training reminder")
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
             }
-            .tint(.ttPrimaryInteractive)
+            .tint(.accentInteractive)
             .onChange(of: rule.reminderEnabled) { _, newValue in
                 try? modelContext.save()
                 if newValue {
@@ -204,7 +204,7 @@ private struct DayControlsView: View {
                 HStack {
                     Text("Reminder time")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     Spacer()
                     DatePicker(
                         "",

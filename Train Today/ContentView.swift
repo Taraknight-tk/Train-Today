@@ -56,6 +56,6 @@ struct MainTabView: View {
                 }
                 .tag(AppState.TabItem.settings)
         }
-        .tint(.ttPrimaryInteractive)
+        .tint(.accentInteractive)
     }
 }

@@ -65,7 +65,7 @@ struct QuickLogView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // Search bar
@@ -118,7 +118,7 @@ struct QuickLogView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .foregroundColor(.ttPrimaryInteractive)
+                        .foregroundColor(.accentInteractive)
                 }
             }
         }
@@ -129,7 +129,7 @@ struct QuickLogView: View {
     private var searchBar: some View {
         HStack(spacing: TTSpacing.xs) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
             TextField("Search skills…", text: $searchText)
                 .font(TTFont.body)
                 .autocorrectionDisabled()
@@ -138,13 +138,13 @@ struct QuickLogView: View {
                     searchText = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
                 .buttonStyle(.plain)
             }
         }
         .padding(TTSpacing.sm)
-        .background(Color.ttSurface)
+        .background(Color.surface)
         .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
     }
 
@@ -157,13 +157,13 @@ struct QuickLogView: View {
                     HStack(spacing: 4) {
                         Text(skill.name)
                             .font(TTFont.caption)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Button {
                             deselect(skill)
                         } label: {
                             Image(systemName: "xmark")
                                 .font(.caption2)
-                                .foregroundColor(.ttTextSecondary)
+                                .foregroundColor(.textSecondary)
                         }
                         .buttonStyle(.plain)
                     }
@@ -182,7 +182,7 @@ struct QuickLogView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             Text("Recently Practiced")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             VStack(spacing: TTSpacing.xs) {
                 ForEach(recentSkills) { skill in
                     skillRow(skill)
@@ -197,12 +197,12 @@ struct QuickLogView: View {
         VStack(alignment: .leading, spacing: TTSpacing.lg) {
             Text(searchText.isEmpty ? "All Skills" : "Results")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             if filteredSkills.isEmpty {
                 Text("No skills match \"\(searchText)\"")
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                     .padding(.vertical, TTSpacing.sm)
             } else {
                 ForEach(skillsByCategory, id: \.0) { category, skills in
@@ -211,10 +211,10 @@ struct QuickLogView: View {
                         HStack(spacing: TTSpacing.xs) {
                             Image(systemName: category.icon)
                                 .font(.caption)
-                                .foregroundColor(.ttText)
+                                .foregroundColor(.textPrimary)
                             Text(category.shortName)
                                 .font(TTFont.bodySmall)
-                                .foregroundColor(.ttTextSecondary)
+                                .foregroundColor(.textSecondary)
                         }
                         ForEach(skills) { skill in
                             skillRow(skill)
@@ -234,21 +234,21 @@ struct QuickLogView: View {
         } label: {
             HStack(spacing: TTSpacing.sm) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isSelected ? TTColor.primaryInteractive : .ttSecondaryLight)
+                    .foregroundColor(isSelected ? Color.accentInteractive : .fillSecondary)
                     .font(.title3)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(skill.name)
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Text(skill.status.rawValue)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
                 Spacer()
             }
             .padding(TTSpacing.sm)
-            .background(isSelected ? TTColor.forCategory(skill.category).opacity(0.08) : Color.ttSurface)
+            .background(isSelected ? TTColor.forCategory(skill.category).opacity(0.08) : Color.surface)
             .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
             .overlay(
                 RoundedRectangle(cornerRadius: TTRadius.sm)
@@ -267,7 +267,7 @@ struct QuickLogView: View {
         VStack(alignment: .leading, spacing: TTSpacing.md) {
             Text("Session Details")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             VStack(spacing: TTSpacing.md) {
 
@@ -275,7 +275,7 @@ struct QuickLogView: View {
                 HStack {
                     Text("Date")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     Spacer()
                     DatePicker(
                         "",
@@ -284,17 +284,17 @@ struct QuickLogView: View {
                         displayedComponents: [.date]
                     )
                     .labelsHidden()
-                    .tint(.ttPrimaryInteractive)
+                    .tint(.accentInteractive)
                 }
                 .padding(TTSpacing.sm)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
 
                 // Duration
                 VStack(alignment: .leading, spacing: TTSpacing.xs) {
                     Text("Total session length")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: TTSpacing.xs) {
                             ForEach([5, 10, 15, 20, 30, 45, 60], id: \.self) { mins in
@@ -305,22 +305,22 @@ struct QuickLogView: View {
                                 .font(TTFont.caption)
                                 .padding(.horizontal, TTSpacing.sm)
                                 .padding(.vertical, TTSpacing.xxs + 2)
-                                .background(durationMinutes == mins ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                                .foregroundColor(durationMinutes == mins ? .white : .ttText)
+                                .background(durationMinutes == mins ? Color.accentInteractive : Color.fillSecondary)
+                                .foregroundColor(durationMinutes == mins ? .white : .textPrimary)
                                 .clipShape(Capsule())
                             }
                         }
                     }
                 }
                 .padding(TTSpacing.sm)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
 
                 // Rating
                 VStack(alignment: .leading, spacing: TTSpacing.xs) {
                     Text("How did it go?")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     HStack(spacing: TTSpacing.sm) {
                         ForEach(SessionRating.allCases) { r in
                             Button {
@@ -331,16 +331,16 @@ struct QuickLogView: View {
                                         .font(.title3)
                                     Text(r.rawValue)
                                         .font(TTFont.caption)
-                                        .foregroundColor(rating == r ? .ttPrimaryInteractive : .ttTextSecondary)
+                                        .foregroundColor(rating == r ? .accentInteractive : .textSecondary)
                                 }
                                 .padding(.horizontal, TTSpacing.sm)
                                 .padding(.vertical, TTSpacing.xs)
-                                .background(rating == r ? Color.ttPrimary.opacity(0.12) : Color.ttSurface)
+                                .background(rating == r ? Color.accentLight.opacity(0.12) : Color.surface)
                                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: TTRadius.sm)
                                         .strokeBorder(
-                                            rating == r ? TTColor.primaryInteractive : Color.ttSecondaryLight,
+                                            rating == r ? Color.accentInteractive : Color.fillSecondary,
                                             lineWidth: 1.5
                                         )
                                 )
@@ -350,25 +350,25 @@ struct QuickLogView: View {
                     }
                 }
                 .padding(TTSpacing.sm)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
 
                 // Notes
                 VStack(alignment: .leading, spacing: TTSpacing.xs) {
                     Text("Notes (optional)")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     TextEditor(text: $notes)
                         .font(TTFont.body)
                         .frame(minHeight: 80)
                         .scrollContentBackground(.hidden)
                 }
                 .padding(TTSpacing.sm)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
                 .overlay(
                     RoundedRectangle(cornerRadius: TTRadius.sm)
-                        .strokeBorder(Color.ttSecondaryLight, lineWidth: 1)
+                        .strokeBorder(Color.fillSecondary, lineWidth: 1)
                 )
             }
         }

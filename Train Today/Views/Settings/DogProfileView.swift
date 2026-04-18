@@ -24,14 +24,14 @@ struct DogProfileView: View {
 
     var body: some View {
         ZStack {
-            Color.ttBackground.ignoresSafeArea()
+            Color.background.ignoresSafeArea()
 
             Form {
                 // Profile photo
                 Section {
                     photoSection
                 }
-                .listRowBackground(Color.ttSurface)
+                .listRowBackground(Color.surface)
 
                 // Dog info
                 Section("Dog Information") {
@@ -40,38 +40,38 @@ struct DogProfileView: View {
 
                     HStack {
                         Text("Age")
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Spacer()
                         Stepper("\(ageYears) yr", value: $ageYears, in: 0...20)
                             .labelsHidden()
                         Text("\(ageYears) yr")
                             .font(TTFont.bodySmall)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                             .frame(width: 40, alignment: .center)
                         Stepper("\(ageMonths) mo", value: $ageMonths, in: 0...11)
                             .labelsHidden()
                         Text("\(ageMonths) mo")
                             .font(TTFont.bodySmall)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                             .frame(width: 40, alignment: .center)
                     }
 
                     Toggle("Program Dog", isOn: $isProgramDog)
-                        .tint(.ttPrimaryInteractive)
+                        .tint(.accentInteractive)
                 }
-                .listRowBackground(Color.ttSurface)
+                .listRowBackground(Color.surface)
 
                 // Handler notes
                 Section("Handler Notes") {
                     Text("Physical limitations, sensitivities, or context the app should respect.")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     TextEditor(text: $handlerNotes)
                         .font(TTFont.body)
                         .frame(minHeight: 80)
                         .scrollContentBackground(.hidden)
                 }
-                .listRowBackground(Color.ttSurface)
+                .listRowBackground(Color.surface)
 
                 // Save
                 Section {
@@ -82,15 +82,15 @@ struct DogProfileView: View {
                             Spacer()
                             Text(isSaved ? "✓ Saved" : "Save Changes")
                                 .font(TTFont.headline)
-                                .foregroundColor(isSaved ? .ttSuccess : .ttPrimaryInteractive)
+                                .foregroundColor(isSaved ? .success : .accentInteractive)
                             Spacer()
                         }
                     }
                 }
-                .listRowBackground(Color.ttSurface)
+                .listRowBackground(Color.surface)
             }
             .scrollContentBackground(.hidden)
-            .background(Color.ttBackground)
+            .background(Color.background)
         }
         .navigationTitle("Dog Profile")
         .navigationBarTitleDisplayMode(.inline)
@@ -118,18 +118,18 @@ struct DogProfileView: View {
                     } else {
                         Image(systemName: "pawprint.fill")
                             .font(.system(size: 40))
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                     }
                 }
                 .frame(width: 100, height: 100)
-                .background(Color.ttSecondaryLight)
+                .background(Color.fillSecondary)
                 .clipShape(Circle())
-                .overlay(Circle().strokeBorder(Color.ttPrimary.opacity(0.3), lineWidth: 2))
+                .overlay(Circle().strokeBorder(Color.accentLight.opacity(0.3), lineWidth: 2))
 
                 PhotosPicker(selection: $selectedPhoto, matching: .images) {
                     Text("Change Photo")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttPrimaryInteractive)
+                        .foregroundColor(.accentInteractive)
                 }
             }
             Spacer()

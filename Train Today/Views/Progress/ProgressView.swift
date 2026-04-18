@@ -34,7 +34,7 @@ struct ProgressView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: TTSpacing.lg) {
@@ -67,19 +67,19 @@ struct ProgressView: View {
                 value: "\(SchedulingEngine.currentStreak(sessions: Array(sessions)))",
                 label: "Day Streak",
                 icon: "flame.fill",
-                color: TTColor.primaryInteractive
+                color: Color.accentInteractive
             )
             statTile(
                 value: "\(sessions.count)",
                 label: "Total Sessions",
                 icon: "checkmark.circle.fill",
-                color: TTColor.primaryInteractive
+                color: Color.accentInteractive
             )
             statTile(
                 value: totalMinutesLabel,
                 label: "Total Minutes",
                 icon: "clock.fill",
-                color: .ttSecondary
+                color: .fillBorder
             )
         }
     }
@@ -91,10 +91,10 @@ struct ProgressView: View {
                 .foregroundColor(color)
             Text(value)
                 .font(TTFont.title)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text(label)
                 .font(TTFont.caption)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -112,7 +112,7 @@ struct ProgressView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             Text("By Category")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: TTSpacing.sm) {
                 ForEach(TrainingCategoryType.allCases) { category in
@@ -129,19 +129,19 @@ struct ProgressView: View {
         return VStack(alignment: .leading, spacing: TTSpacing.xs) {
             HStack {
                 Image(systemName: category.icon)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 Spacer()
             }
             Text(category.shortName)
                 .font(TTFont.bodySmall)
                 .fontWeight(.semibold)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text("\(catSessions.count) sessions")
                 .font(TTFont.caption)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
             Text("\(catSkills.count) skills")
                 .font(TTFont.caption)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
 
             // Simple recency bar
             ProgressBar(
@@ -167,7 +167,7 @@ struct ProgressView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             Text("Session History")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             // Filter pills
             ScrollView(.horizontal, showsIndicators: false) {
@@ -179,8 +179,8 @@ struct ProgressView: View {
                         .font(TTFont.bodySmall)
                         .padding(.horizontal, TTSpacing.sm)
                         .padding(.vertical, TTSpacing.xxs + 2)
-                        .background(selectedFilter == filter ? TTColor.primaryInteractive : Color.ttSecondaryLight)
-                        .foregroundColor(selectedFilter == filter ? .white : .ttText)
+                        .background(selectedFilter == filter ? Color.accentInteractive : Color.fillSecondary)
+                        .foregroundColor(selectedFilter == filter ? .white : .textPrimary)
                         .clipShape(Capsule())
                     }
                 }
@@ -206,10 +206,10 @@ struct ProgressView: View {
                     .font(.largeTitle)
                 Text("No sessions yet")
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                 Text("Log your first session to see history here.")
                     .font(TTFont.caption)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                     .multilineTextAlignment(.center)
             }
             .padding(TTSpacing.xl)
@@ -236,34 +236,34 @@ struct SessionHistoryRow: View {
                     Text(session.skillName)
                         .font(TTFont.bodySmall)
                         .fontWeight(.medium)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Spacer()
                     Text(session.rating.emoji)
                 }
                 HStack(spacing: 4) {
                     Text(session.dateDisplay)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                     if session.durationMinutes > 0 {
                         Text("·")
-                            .foregroundColor(.ttSecondaryLight)
+                            .foregroundColor(.fillSecondary)
                         Text("\(session.durationMinutes) min")
                             .font(TTFont.caption)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                     }
                     if session.isQuickWin {
                         Text("·")
-                            .foregroundColor(.ttSecondaryLight)
+                            .foregroundColor(.fillSecondary)
                         Text("Quick Win")
                             .font(TTFont.caption)
-                            .foregroundColor(.ttPrimaryInteractive)
+                            .foregroundColor(.accentInteractive)
                     }
                 }
             }
         }
         .padding(.horizontal, TTSpacing.sm)
         .padding(.vertical, TTSpacing.xs)
-        .background(Color.ttSurface)
+        .background(Color.surface)
         .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
     }
 }

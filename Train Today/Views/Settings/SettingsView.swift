@@ -17,7 +17,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 List {
 
@@ -29,16 +29,16 @@ struct SettingsView: View {
                             dogProfileRow
                         }
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     // Schedule
                     Section("Training Schedule") {
                         NavigationLink("Schedule Settings") {
                             ScheduleSettingsView()
                         }
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     // Trainer import (Phase 2 — grayed out placeholder)
                     Section("Trainer Tools") {
@@ -47,19 +47,19 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "link.badge.plus")
-                                    .foregroundColor(.ttPrimaryInteractive)
+                                    .foregroundColor(.accentInteractive)
                                 Text("Import Trainer Curriculum")
-                                    .foregroundColor(.ttText)
+                                    .foregroundColor(.textPrimary)
                             }
                         }
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     // Notifications
                     Section("Notifications") {
                         notificationStatusRow
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     // About
                     Section("About") {
@@ -84,7 +84,7 @@ struct SettingsView: View {
                             Spacer()
                         }
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
 
                     // App info
                     Section {
@@ -93,15 +93,15 @@ struct SettingsView: View {
                             VStack(spacing: 4) {
                                 Text("Train Today")
                                     .font(TTFont.bodySmall)
-                                    .foregroundColor(.ttTextSecondary)
+                                    .foregroundColor(.textSecondary)
                                 Text("Version 1.0 · Privacy-first · No data collected")
                                     .font(TTFont.caption)
-                                    .foregroundColor(.ttTextSecondary)
+                                    .foregroundColor(.textSecondary)
                             }
                             Spacer()
                         }
                     }
-                    .listRowBackground(Color.ttBackground)
+                    .listRowBackground(Color.background)
 
                     // Danger zone
                     Section("Data") {
@@ -109,10 +109,10 @@ struct SettingsView: View {
                             showingResetAlert = true
                         }
                     }
-                    .listRowBackground(Color.ttSurface)
+                    .listRowBackground(Color.surface)
                 }
                 .scrollContentBackground(.hidden)
-                .background(Color.ttBackground)
+                .background(Color.background)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
@@ -139,21 +139,21 @@ struct SettingsView: View {
                     .clipShape(Circle())
             } else {
                 Circle()
-                    .fill(Color.ttSecondaryLight)
+                    .fill(Color.fillSecondary)
                     .frame(width: 44, height: 44)
                     .overlay(
                         Image(systemName: "pawprint.fill")
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                     )
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(profiles.first?.name ?? "Add your dog")
                     .font(TTFont.body)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 if let p = profiles.first, !p.breed.isEmpty {
                     Text("\(p.breed) · \(p.ageDisplay)")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
         }
@@ -164,19 +164,19 @@ struct SettingsView: View {
     private var notificationStatusRow: some View {
         HStack {
             Image(systemName: notificationManager.isAuthorized ? "bell.fill" : "bell.slash")
-                .foregroundColor(notificationManager.isAuthorized ? .ttPrimaryInteractive : .ttTextSecondary)
+                .foregroundColor(notificationManager.isAuthorized ? .accentInteractive : .textSecondary)
             Text(notificationManager.isAuthorized
                  ? "Reminders enabled"
                  : "Reminders are off")
                 .font(TTFont.body)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Spacer()
             if !notificationManager.isAuthorized {
                 Button("Enable") {
                     notificationManager.requestAuthorization()
                 }
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttPrimaryInteractive)
+                .foregroundColor(.accentInteractive)
             }
         }
     }
@@ -186,11 +186,11 @@ struct SettingsView: View {
     private func settingsRow(icon: String, label: String) -> some View {
         HStack(spacing: TTSpacing.sm) {
             Image(systemName: icon)
-                .foregroundColor(.ttPrimaryInteractive)
+                .foregroundColor(.accentInteractive)
                 .frame(width: 24)
             Text(label)
                 .font(TTFont.body)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
         }
     }
 
@@ -214,15 +214,15 @@ struct SettingsView: View {
     private var disclaimerSheet: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
                 ScrollView {
                     VStack(alignment: .leading, spacing: TTSpacing.md) {
                         Text("Train Today is a planning tool for service dog handlers. It is not a replacement for working with a qualified service dog trainer. The developer is not a professional dog trainer.")
                             .font(TTFont.body)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text("This app exists to support the disabled community in managing their training practice. Always consult a certified professional trainer for guidance specific to your dog and disability.")
                             .font(TTFont.body)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                     }
                     .padding(TTSpacing.md)
                 }
@@ -231,7 +231,7 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { showingDisclaimer = false }.foregroundColor(.ttPrimaryInteractive)
+                    Button("Done") { showingDisclaimer = false }.foregroundColor(.accentInteractive)
                 }
             }
         }
@@ -240,18 +240,18 @@ struct SettingsView: View {
     private var privacySheet: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
                 ScrollView {
                     VStack(alignment: .leading, spacing: TTSpacing.md) {
                         Text("Train Today collects no data of any kind.")
                             .font(TTFont.headline)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text("All information you enter — your dog's profile, training skills, session logs, and schedule preferences — is stored only on your device. Nothing is transmitted to any server. There are no analytics, no crash reports that leave your device, and no third-party SDKs of any kind.")
                             .font(TTFont.body)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text("Train Today works fully offline. Deleting the app deletes all data permanently.")
                             .font(TTFont.body)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                     }
                     .padding(TTSpacing.md)
                 }
@@ -260,7 +260,7 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { showingPrivacy = false }.foregroundColor(.ttPrimaryInteractive)
+                    Button("Done") { showingPrivacy = false }.foregroundColor(.accentInteractive)
                 }
             }
         }

@@ -12,7 +12,7 @@ struct LoadingView: View {
 
     var body: some View {
         ZStack {
-            Color.ttBackground
+            Color.background
                 .ignoresSafeArea()
 
             VStack(spacing: TTSpacing.lg) {
@@ -20,7 +20,7 @@ struct LoadingView: View {
                 // Paw print icon
                 Image(systemName: "pawprint.fill")
                     .font(.system(size: 56, weight: .regular))
-                    .foregroundColor(TTColor.primaryInteractive)
+                    .foregroundColor(Color.accentInteractive)
                     .opacity(pawOpacity)
                     .scaleEffect(pawScale)
 
@@ -28,18 +28,18 @@ struct LoadingView: View {
                 VStack(spacing: TTSpacing.xs) {
                     Text("Train Today")
                         .font(TTFont.display)
-                        .foregroundColor(TTColor.text)
+                        .foregroundColor(Color.textPrimary)
 
                     Text("Open the app. Get a plan. Train.")
                         .font(TTFont.caption)
-                        .foregroundColor(TTColor.textSecondary)
+                        .foregroundColor(Color.textSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .opacity(pawOpacity)
 
                 // Spinner
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: TTColor.primaryInteractive))
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.accentInteractive))
                     .scaleEffect(1.2)
                     .padding(.top, TTSpacing.sm)
                     .opacity(pawOpacity)

@@ -46,7 +46,7 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            Color.ttBackground.ignoresSafeArea()
+            Color.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 // Progress bar
@@ -77,10 +77,10 @@ struct OnboardingView: View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Color.ttSecondaryLight)
+                    .fill(Color.fillSecondary)
                     .frame(height: 4)
                 Capsule()
-                    .fill(TTColor.primaryInteractive)
+                    .fill(Color.accentInteractive)
                     .frame(width: geo.size.width * (CGFloat(currentStep + 1) / CGFloat(totalSteps)), height: 4)
                     .animation(.easeInOut, value: currentStep)
             }
@@ -134,11 +134,11 @@ struct OnboardingView: View {
                 .font(.system(size: 80))
             Text("Welcome to\nTrain Today")
                 .font(TTFont.display)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
                 .multilineTextAlignment(.center)
             Text("Your personal service dog training planner. Tell us a little about your team and we'll get you set up in about 5 minutes.")
                 .font(TTFont.body)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, TTSpacing.xl)
             Spacer()
@@ -164,7 +164,7 @@ struct OnboardingView: View {
                     inputField(title: "Breed", text: $dogBreed, placeholder: "e.g., Standard Poodle")
 
                     VStack(alignment: .leading, spacing: TTSpacing.xs) {
-                        Text("Age").font(TTFont.bodySmall).foregroundColor(.ttTextSecondary)
+                        Text("Age").font(TTFont.bodySmall).foregroundColor(.textSecondary)
                         HStack {
                             Stepper("\(dogAgeYears) year\(dogAgeYears == 1 ? "" : "s")",
                                     value: $dogAgeYears, in: 0...20)
@@ -176,7 +176,7 @@ struct OnboardingView: View {
                     .ttCard()
 
                     Toggle("Program dog (vs. owner-trained)", isOn: $isProgramDog)
-                        .tint(.ttPrimaryInteractive)
+                        .tint(.accentInteractive)
                         .ttCard()
                 }
 
@@ -223,20 +223,20 @@ struct OnboardingView: View {
             HStack(spacing: TTSpacing.md) {
                 Image(systemName: category.icon)
                     .font(.title2)
-                    .foregroundColor(isActive ? TTColor.primaryInteractive : .ttTextSecondary)
+                    .foregroundColor(isActive ? Color.accentInteractive : .textSecondary)
                     .frame(width: 32)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(category.rawValue)
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Text(category.description)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                         .lineLimit(2)
                 }
                 Spacer()
                 Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isActive ? TTColor.primaryInteractive : .ttSecondaryLight)
+                    .foregroundColor(isActive ? Color.accentInteractive : .fillSecondary)
             }
             .ttCard()
         }
@@ -261,7 +261,7 @@ struct OnboardingView: View {
                     }
                     .buttonStyle(.borderless)
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttPrimaryInteractive)
+                    .foregroundColor(.accentInteractive)
 
                     Spacer()
 
@@ -270,7 +270,7 @@ struct OnboardingView: View {
                     }
                     .buttonStyle(.borderless)
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                 }
 
                 // Tasks grouped by disability type
@@ -295,14 +295,14 @@ struct OnboardingView: View {
                 HStack(spacing: TTSpacing.xs) {
                     Image(systemName: group.icon)
                         .font(.subheadline)
-                        .foregroundColor(.ttPrimaryInteractive)
+                        .foregroundColor(.accentInteractive)
                     VStack(alignment: .leading, spacing: 1) {
                         Text(group.rawValue)
                             .font(TTFont.headline)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text(group.description)
                             .font(TTFont.caption)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                     }
                 }
 
@@ -318,20 +318,20 @@ struct OnboardingView: View {
                     } label: {
                         HStack(spacing: TTSpacing.sm) {
                             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(isSelected ? .ttPrimaryInteractive : .ttSecondaryLight)
+                                .foregroundColor(isSelected ? .accentInteractive : .fillSecondary)
                                 .font(.title3)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(template.name)
                                     .font(TTFont.bodySmall)
-                                    .foregroundColor(.ttText)
+                                    .foregroundColor(.textPrimary)
                                 Text(template.importance.rawValue)
                                     .font(TTFont.caption)
-                                    .foregroundColor(.ttTextSecondary)
+                                    .foregroundColor(.textSecondary)
                             }
                             Spacer()
                         }
                         .padding(TTSpacing.sm)
-                        .background(isSelected ? Color.ttPrimary.opacity(0.08) : Color.ttSurface)
+                        .background(isSelected ? Color.accentLight.opacity(0.08) : Color.surface)
                         .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
                     }
                     .buttonStyle(.plain)
@@ -368,10 +368,10 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             HStack {
                 Image(systemName: category.icon)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 Text(category.shortName)
                     .font(TTFont.headline)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
             }
             ForEach(DefaultSkillLibrary.skills(for: category).filter { template in
                 // For task skills, only show the ones the handler selected in step 3
@@ -380,7 +380,7 @@ struct OnboardingView: View {
                 HStack {
                     Text(template.name)
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Spacer()
                     Picker("", selection: Binding(
                         get: { skillStatuses[template.name] ?? .developing },
@@ -391,11 +391,11 @@ struct OnboardingView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    .tint(.ttPrimaryInteractive)
+                    .tint(.accentInteractive)
                 }
                 .padding(.horizontal, TTSpacing.sm)
                 .padding(.vertical, TTSpacing.xs)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
             }
         }
@@ -433,17 +433,17 @@ struct OnboardingView: View {
                     .font(TTFont.body)
                     .frame(minHeight: 120)
                     .padding(TTSpacing.sm)
-                    .background(Color.ttSurface)
+                    .background(Color.surface)
                     .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
                     .overlay(
                         RoundedRectangle(cornerRadius: TTRadius.md)
-                            .strokeBorder(Color.ttSecondaryLight, lineWidth: 1)
+                            .strokeBorder(Color.fillSecondary, lineWidth: 1)
                     )
                     .scrollContentBackground(.hidden)
 
                 Text("This is stored only on your device and never shared.")
                     .font(TTFont.caption)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
 
                 navButtons()
                     .padding(.bottom, TTSpacing.xl)
@@ -467,24 +467,24 @@ struct OnboardingView: View {
                 VStack(alignment: .leading, spacing: TTSpacing.md) {
                     Text("Train Today is a planning tool for service dog handlers. It is not a replacement for working with a qualified service dog trainer.")
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Text("The developer is not a professional dog trainer. This app exists to support the disabled community in managing their training practice — not to provide professional advice.")
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Text("Always consult a certified trainer for guidance specific to your dog and your disability.")
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                 }
                 .ttCard()
 
                 Toggle(isOn: $disclaimerAcknowledged) {
                     Text("I understand this is a planning tool, not professional training advice.")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                 }
-                .tint(.ttPrimaryInteractive)
+                .tint(.accentInteractive)
                 .padding(TTSpacing.sm)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
 
                 Button("Get Started 🐾") {
@@ -506,23 +506,23 @@ struct OnboardingView: View {
             Text(emoji).font(.system(size: 40))
             Text(title)
                 .font(TTFont.display)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text(subtitle)
                 .font(TTFont.body)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
         }
     }
 
     private func inputField(title: String, text: Binding<String>, placeholder: String) -> some View {
         VStack(alignment: .leading, spacing: TTSpacing.xxs) {
-            Text(title).font(TTFont.bodySmall).foregroundColor(.ttTextSecondary)
+            Text(title).font(TTFont.bodySmall).foregroundColor(.textSecondary)
             TextField(placeholder, text: text)
                 .font(TTFont.body)
                 .padding(TTSpacing.sm)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
                 .overlay(RoundedRectangle(cornerRadius: TTRadius.sm)
-                    .strokeBorder(Color.ttSecondaryLight, lineWidth: 1))
+                    .strokeBorder(Color.fillSecondary, lineWidth: 1))
         }
     }
 

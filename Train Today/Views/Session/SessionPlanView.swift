@@ -25,7 +25,7 @@ struct SessionPlanView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.ttBackground.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: TTSpacing.lg) {
@@ -61,7 +61,7 @@ struct SessionPlanView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
-                        .foregroundColor(.ttPrimaryInteractive)
+                        .foregroundColor(.accentInteractive)
                 }
             }
             .sheet(isPresented: $showingLog) {
@@ -77,18 +77,18 @@ struct SessionPlanView: View {
             if isQuickWin {
                 Text("Quick Win 🎉")
                     .font(TTFont.display)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 Text("One easy skill. 5 minutes. You've got this.")
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                     .multilineTextAlignment(.center)
             } else {
                 Text("Your session plan is ready.")
                     .font(TTFont.display)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 Text("Total: ~\(plan.totalMinutes) minutes")
                     .font(TTFont.body)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
             }
         }
         .multilineTextAlignment(.center)
@@ -99,13 +99,13 @@ struct SessionPlanView: View {
     private func warningBanner(_ text: String) -> some View {
         HStack(spacing: TTSpacing.xs) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
             Text(text)
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
         }
         .padding(TTSpacing.sm)
-        .background(Color.ttWarning.opacity(0.12))
+        .background(Color.warning.opacity(0.12))
         .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
     }
 
@@ -131,19 +131,19 @@ struct SessionPlanView: View {
             // Skill name
             Text(skill.name)
                 .font(isPrimary ? TTFont.display : TTFont.title)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             // Duration
             HStack(spacing: TTSpacing.xxs) {
                 Image(systemName: "clock")
-                    .foregroundColor(.ttPrimaryInteractive)
+                    .foregroundColor(.accentInteractive)
                 Text("~\(item.suggestedMinutes) min")
                     .font(TTFont.body)
-                    .foregroundColor(.ttText)
+                    .foregroundColor(.textPrimary)
                 if item.adjustedForLowEnergy {
                     Text("· low energy version")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
 
@@ -152,14 +152,14 @@ struct SessionPlanView: View {
                 VStack(alignment: .leading, spacing: TTSpacing.xxs) {
                     Text("How to practice")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                         .textCase(.uppercase)
                     Text(skill.howToReminder)
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                 }
                 .padding(TTSpacing.sm)
-                .background(Color.ttSecondaryLight)
+                .background(Color.fillSecondary)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
             }
 
@@ -168,11 +168,11 @@ struct SessionPlanView: View {
                 VStack(alignment: .leading, spacing: TTSpacing.xxs) {
                     Text("You're done when…")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                         .textCase(.uppercase)
                     Text(skill.successMetric)
                         .font(TTFont.body)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                 }
                 .padding(TTSpacing.sm)
                 .background(TTColor.forCategory(category).opacity(0.08))
@@ -182,10 +182,10 @@ struct SessionPlanView: View {
             // Recency
             HStack(spacing: TTSpacing.xxs) {
                 Image(systemName: "calendar")
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
                 Text(skill.recencyLabel)
                     .font(TTFont.caption)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
             }
         }
         .ttCard()
@@ -198,7 +198,7 @@ struct SessionPlanView: View {
             VStack { Divider() }
             Text("If time allows")
                 .font(TTFont.caption)
-                .foregroundColor(.ttTextSecondary)
+                .foregroundColor(.textSecondary)
                 .fixedSize()
             VStack { Divider() }
         }
@@ -242,14 +242,14 @@ struct SessionPlanCard: View {
                 VStack(alignment: .leading, spacing: TTSpacing.xxs) {
                     Text("Your plan is ready 🎯")
                         .font(TTFont.headline)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Text("\(plan.primarySkill.skill.name) · ~\(plan.totalMinutes) min")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.ttPrimaryInteractive)
+                    .foregroundColor(.accentInteractive)
             }
             .ttCard()
         }
@@ -274,7 +274,7 @@ struct CategoryTag: View {
         .padding(.horizontal, TTSpacing.sm)
         .padding(.vertical, TTSpacing.xxs)
         .background(TTColor.forCategory(category).opacity(0.15))
-        .foregroundColor(.ttText)
+        .foregroundColor(.textPrimary)
         .clipShape(Capsule())
     }
 }
@@ -291,8 +291,8 @@ struct ImportanceBadge: View {
             }
             .padding(.horizontal, TTSpacing.xs)
             .padding(.vertical, 3)
-            .background(importance == .critical ? Color.ttWarning.opacity(0.15) : Color.ttSecondaryLight)
-            .foregroundColor(importance == .critical ? .ttText : .ttTextSecondary)
+            .background(importance == .critical ? Color.warning.opacity(0.15) : Color.fillSecondary)
+            .foregroundColor(importance == .critical ? .textPrimary : .textSecondary)
             .clipShape(Capsule())
         }
     }
@@ -307,8 +307,8 @@ struct LowEnergyBadge: View {
         }
         .padding(.horizontal, TTSpacing.xs)
         .padding(.vertical, 3)
-        .background(Color.ttPrimaryLight.opacity(0.2))
-        .foregroundColor(.ttPrimaryInteractive)
+        .background(Color.accentLighter.opacity(0.2))
+        .foregroundColor(.accentInteractive)
         .clipShape(Capsule())
     }
 }

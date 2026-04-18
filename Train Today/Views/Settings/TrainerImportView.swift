@@ -16,7 +16,7 @@ struct TrainerImportView: View {
 
     var body: some View {
         ZStack {
-            Color.ttBackground.ignoresSafeArea()
+            Color.background.ignoresSafeArea()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: TTSpacing.lg) {
@@ -27,25 +27,25 @@ struct TrainerImportView: View {
                             .font(.system(size: 40))
                         Text("Trainer Curriculum")
                             .font(TTFont.display)
-                            .foregroundColor(.ttText)
+                            .foregroundColor(.textPrimary)
                         Text("If your trainer gave you a Train Today import link, paste it below. This will add skills to your inventory while keeping all data on your device.")
                             .font(TTFont.body)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                     }
 
                     // Input
                     VStack(alignment: .leading, spacing: TTSpacing.xs) {
                         Text("Trainer link")
                             .font(TTFont.bodySmall)
-                            .foregroundColor(.ttTextSecondary)
+                            .foregroundColor(.textSecondary)
                         TextEditor(text: $linkText)
                             .font(TTFont.bodySmall)
                             .frame(minHeight: 80)
                             .padding(TTSpacing.sm)
-                            .background(Color.ttSurface)
+                            .background(Color.surface)
                             .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
                             .overlay(RoundedRectangle(cornerRadius: TTRadius.md)
-                                .strokeBorder(Color.ttSecondaryLight, lineWidth: 1))
+                                .strokeBorder(Color.fillSecondary, lineWidth: 1))
                             .scrollContentBackground(.hidden)
                     }
 
@@ -53,10 +53,10 @@ struct TrainerImportView: View {
                     if let error = parseError {
                         HStack {
                             Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundColor(.ttError)
+                                .foregroundColor(.error)
                             Text(error)
                                 .font(TTFont.bodySmall)
-                                .foregroundColor(.ttError)
+                                .foregroundColor(.error)
                         }
                     }
 
@@ -89,10 +89,10 @@ struct TrainerImportView: View {
                     if importSuccess {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.ttSuccess)
+                                .foregroundColor(.success)
                             Text("Skills imported successfully!")
                                 .font(TTFont.body)
-                                .foregroundColor(.ttSuccess)
+                                .foregroundColor(.success)
                         }
                     }
 
@@ -112,27 +112,27 @@ struct TrainerImportView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             Text("Preview")
                 .font(TTFont.headline)
-                .foregroundColor(.ttText)
+                .foregroundColor(.textPrimary)
 
             if !payload.trainerName.isEmpty {
                 Text("From: \(payload.trainerName)")
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttTextSecondary)
+                    .foregroundColor(.textSecondary)
             }
 
             ForEach(payload.skills, id: \.name) { entry in
                 HStack {
                     Text(entry.name)
                         .font(TTFont.bodySmall)
-                        .foregroundColor(.ttText)
+                        .foregroundColor(.textPrimary)
                     Spacer()
                     Text(entry.category)
                         .font(TTFont.caption)
-                        .foregroundColor(.ttTextSecondary)
+                        .foregroundColor(.textSecondary)
                 }
                 .padding(.horizontal, TTSpacing.sm)
                 .padding(.vertical, 4)
-                .background(Color.ttSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.sm))
             }
         }
