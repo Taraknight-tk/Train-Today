@@ -39,7 +39,7 @@ struct SkillManagerView: View {
                         showingAddSkill = true
                     } label: {
                         Image(systemName: "plus")
-                            .foregroundColor(.ttPrimary)
+                            .foregroundColor(.ttPrimaryInteractive)
                     }
                 }
             }
@@ -79,7 +79,7 @@ struct SkillManagerView: View {
                         .background(selectedCategory == category
                             ? TTColor.forCategory(category)
                             : Color.ttSecondaryLight)
-                        .foregroundColor(selectedCategory == category ? .white : .ttText)
+                        .foregroundColor(.ttText)
                         .clipShape(Capsule())
                     }
                 }
@@ -118,7 +118,7 @@ struct SkillManagerView: View {
         VStack(spacing: TTSpacing.md) {
             Image(systemName: selectedCategory.icon)
                 .font(.system(size: 48))
-                .foregroundColor(.ttPrimaryLight)
+                .foregroundColor(.ttText)
             Text("No \(selectedCategory.shortName) skills yet")
                 .font(TTFont.headline)
                 .foregroundColor(.ttText)
@@ -160,7 +160,7 @@ struct SkillRowView: View {
                     if skill.importance == .critical {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .font(.caption)
-                            .foregroundColor(.ttWarning)
+                            .foregroundColor(.ttText)
                     }
                     if skill.isCriticalOverdue {
                         Text("OVERDUE")
@@ -168,7 +168,7 @@ struct SkillRowView: View {
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(Color.ttWarning.opacity(0.15))
-                            .foregroundColor(.ttWarning)
+                            .foregroundColor(.ttText)
                             .clipShape(Capsule())
                     }
                 }
@@ -199,7 +199,7 @@ struct SkillRowView: View {
     private var statusColor: Color {
         switch skill.status {
         case .beginner:    return .ttWarning
-        case .developing:  return .ttPrimary
+        case .developing:  return TTColor.primaryInteractive
         case .maintaining: return .ttSuccess
         }
     }
@@ -301,7 +301,7 @@ struct EditSkillView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") { saveSkill() }
-                        .foregroundColor(.ttPrimary)
+                        .foregroundColor(.ttPrimaryInteractive)
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }

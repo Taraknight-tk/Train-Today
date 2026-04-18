@@ -93,7 +93,7 @@ private struct DayRowView: View {
                             Text(rule.reminderTimeLabel)
                                 .font(TTFont.caption)
                         }
-                        .foregroundColor(.ttPrimary)
+                        .foregroundColor(.ttPrimaryInteractive)
                     }
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.caption)
@@ -141,7 +141,7 @@ private struct DayControlsView: View {
                         .font(TTFont.caption)
                         .padding(.horizontal, TTSpacing.xs)
                         .padding(.vertical, 4)
-                        .background(rule.maxMinutes == mins ? Color.ttPrimary : Color.ttSecondaryLight)
+                        .background(rule.maxMinutes == mins ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                         .foregroundColor(rule.maxMinutes == mins ? .white : .ttText)
                         .clipShape(Capsule())
                     }
@@ -163,7 +163,7 @@ private struct DayControlsView: View {
                         .font(TTFont.caption)
                         .padding(.horizontal, TTSpacing.xs)
                         .padding(.vertical, 4)
-                        .background(rule.priorityCategory == nil ? Color.ttPrimary : Color.ttSecondaryLight)
+                        .background(rule.priorityCategory == nil ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                         .foregroundColor(rule.priorityCategory == nil ? .white : .ttText)
                         .clipShape(Capsule())
 
@@ -177,7 +177,7 @@ private struct DayControlsView: View {
                             .padding(.horizontal, TTSpacing.xs)
                             .padding(.vertical, 4)
                             .background(rule.priorityCategory == cat ? TTColor.forCategory(cat) : Color.ttSecondaryLight)
-                            .foregroundColor(rule.priorityCategory == cat ? .white : .ttText)
+                            .foregroundColor(rule.priorityCategory == cat ? .ttText : .ttText)
                             .clipShape(Capsule())
                         }
                     }
@@ -190,7 +190,7 @@ private struct DayControlsView: View {
                     .font(TTFont.bodySmall)
                     .foregroundColor(.ttText)
             }
-            .tint(.ttPrimary)
+            .tint(.ttPrimaryInteractive)
             .onChange(of: rule.reminderEnabled) { _, newValue in
                 try? modelContext.save()
                 if newValue {

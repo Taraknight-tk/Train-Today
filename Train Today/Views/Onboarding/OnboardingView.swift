@@ -80,7 +80,7 @@ struct OnboardingView: View {
                     .fill(Color.ttSecondaryLight)
                     .frame(height: 4)
                 Capsule()
-                    .fill(Color.ttPrimary)
+                    .fill(TTColor.primaryInteractive)
                     .frame(width: geo.size.width * (CGFloat(currentStep + 1) / CGFloat(totalSteps)), height: 4)
                     .animation(.easeInOut, value: currentStep)
             }
@@ -176,7 +176,7 @@ struct OnboardingView: View {
                     .ttCard()
 
                     Toggle("Program dog (vs. owner-trained)", isOn: $isProgramDog)
-                        .tint(.ttPrimary)
+                        .tint(.ttPrimaryInteractive)
                         .ttCard()
                 }
 
@@ -223,7 +223,7 @@ struct OnboardingView: View {
             HStack(spacing: TTSpacing.md) {
                 Image(systemName: category.icon)
                     .font(.title2)
-                    .foregroundColor(isActive ? TTColor.forCategory(category) : .ttTextSecondary)
+                    .foregroundColor(isActive ? TTColor.primaryInteractive : .ttTextSecondary)
                     .frame(width: 32)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(category.rawValue)
@@ -236,7 +236,7 @@ struct OnboardingView: View {
                 }
                 Spacer()
                 Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isActive ? TTColor.forCategory(category) : .ttSecondaryLight)
+                    .foregroundColor(isActive ? TTColor.primaryInteractive : .ttSecondaryLight)
             }
             .ttCard()
         }
@@ -261,7 +261,7 @@ struct OnboardingView: View {
                     }
                     .buttonStyle(.borderless)
                     .font(TTFont.bodySmall)
-                    .foregroundColor(.ttPrimary)
+                    .foregroundColor(.ttPrimaryInteractive)
 
                     Spacer()
 
@@ -295,7 +295,7 @@ struct OnboardingView: View {
                 HStack(spacing: TTSpacing.xs) {
                     Image(systemName: group.icon)
                         .font(.subheadline)
-                        .foregroundColor(.ttPrimary)
+                        .foregroundColor(.ttPrimaryInteractive)
                     VStack(alignment: .leading, spacing: 1) {
                         Text(group.rawValue)
                             .font(TTFont.headline)
@@ -318,7 +318,7 @@ struct OnboardingView: View {
                     } label: {
                         HStack(spacing: TTSpacing.sm) {
                             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(isSelected ? .ttPrimary : .ttSecondaryLight)
+                                .foregroundColor(isSelected ? .ttPrimaryInteractive : .ttSecondaryLight)
                                 .font(.title3)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(template.name)
@@ -368,7 +368,7 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: TTSpacing.sm) {
             HStack {
                 Image(systemName: category.icon)
-                    .foregroundColor(TTColor.forCategory(category))
+                    .foregroundColor(.ttText)
                 Text(category.shortName)
                     .font(TTFont.headline)
                     .foregroundColor(.ttText)
@@ -391,7 +391,7 @@ struct OnboardingView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    .tint(.ttPrimary)
+                    .tint(.ttPrimaryInteractive)
                 }
                 .padding(.horizontal, TTSpacing.sm)
                 .padding(.vertical, TTSpacing.xs)
@@ -482,7 +482,7 @@ struct OnboardingView: View {
                         .font(TTFont.bodySmall)
                         .foregroundColor(.ttText)
                 }
-                .tint(.ttPrimary)
+                .tint(.ttPrimaryInteractive)
                 .padding(TTSpacing.sm)
                 .background(Color.ttSurface)
                 .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))

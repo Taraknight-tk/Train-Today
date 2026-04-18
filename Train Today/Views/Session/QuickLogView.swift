@@ -118,7 +118,7 @@ struct QuickLogView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
-                        .foregroundColor(.ttPrimary)
+                        .foregroundColor(.ttPrimaryInteractive)
                 }
             }
         }
@@ -157,13 +157,13 @@ struct QuickLogView: View {
                     HStack(spacing: 4) {
                         Text(skill.name)
                             .font(TTFont.caption)
-                            .foregroundColor(.white)
+                            .foregroundColor(.ttText)
                         Button {
                             deselect(skill)
                         } label: {
                             Image(systemName: "xmark")
                                 .font(.caption2)
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(.ttTextSecondary)
                         }
                         .buttonStyle(.plain)
                     }
@@ -211,7 +211,7 @@ struct QuickLogView: View {
                         HStack(spacing: TTSpacing.xs) {
                             Image(systemName: category.icon)
                                 .font(.caption)
-                                .foregroundColor(TTColor.forCategory(category))
+                                .foregroundColor(.ttText)
                             Text(category.shortName)
                                 .font(TTFont.bodySmall)
                                 .foregroundColor(.ttTextSecondary)
@@ -234,7 +234,7 @@ struct QuickLogView: View {
         } label: {
             HStack(spacing: TTSpacing.sm) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isSelected ? TTColor.forCategory(skill.category) : .ttSecondaryLight)
+                    .foregroundColor(isSelected ? TTColor.primaryInteractive : .ttSecondaryLight)
                     .font(.title3)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -284,7 +284,7 @@ struct QuickLogView: View {
                         displayedComponents: [.date]
                     )
                     .labelsHidden()
-                    .tint(.ttPrimary)
+                    .tint(.ttPrimaryInteractive)
                 }
                 .padding(TTSpacing.sm)
                 .background(Color.ttSurface)
@@ -305,7 +305,7 @@ struct QuickLogView: View {
                                 .font(TTFont.caption)
                                 .padding(.horizontal, TTSpacing.sm)
                                 .padding(.vertical, TTSpacing.xxs + 2)
-                                .background(durationMinutes == mins ? Color.ttPrimary : Color.ttSecondaryLight)
+                                .background(durationMinutes == mins ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                                 .foregroundColor(durationMinutes == mins ? .white : .ttText)
                                 .clipShape(Capsule())
                             }
@@ -331,7 +331,7 @@ struct QuickLogView: View {
                                         .font(.title3)
                                     Text(r.rawValue)
                                         .font(TTFont.caption)
-                                        .foregroundColor(rating == r ? .ttPrimary : .ttTextSecondary)
+                                        .foregroundColor(rating == r ? .ttPrimaryInteractive : .ttTextSecondary)
                                 }
                                 .padding(.horizontal, TTSpacing.sm)
                                 .padding(.vertical, TTSpacing.xs)
@@ -340,7 +340,7 @@ struct QuickLogView: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: TTRadius.sm)
                                         .strokeBorder(
-                                            rating == r ? Color.ttPrimary : Color.ttSecondaryLight,
+                                            rating == r ? TTColor.primaryInteractive : Color.ttSecondaryLight,
                                             lineWidth: 1.5
                                         )
                                 )

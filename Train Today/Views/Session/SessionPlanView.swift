@@ -61,7 +61,7 @@ struct SessionPlanView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
-                        .foregroundColor(.ttPrimary)
+                        .foregroundColor(.ttPrimaryInteractive)
                 }
             }
             .sheet(isPresented: $showingLog) {
@@ -99,7 +99,7 @@ struct SessionPlanView: View {
     private func warningBanner(_ text: String) -> some View {
         HStack(spacing: TTSpacing.xs) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundColor(.ttWarning)
+                .foregroundColor(.ttText)
             Text(text)
                 .font(TTFont.bodySmall)
                 .foregroundColor(.ttText)
@@ -136,7 +136,7 @@ struct SessionPlanView: View {
             // Duration
             HStack(spacing: TTSpacing.xxs) {
                 Image(systemName: "clock")
-                    .foregroundColor(.ttPrimary)
+                    .foregroundColor(.ttPrimaryInteractive)
                 Text("~\(item.suggestedMinutes) min")
                     .font(TTFont.body)
                     .foregroundColor(.ttText)
@@ -249,7 +249,7 @@ struct SessionPlanCard: View {
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.ttPrimary)
+                    .foregroundColor(.ttPrimaryInteractive)
             }
             .ttCard()
         }
@@ -274,7 +274,7 @@ struct CategoryTag: View {
         .padding(.horizontal, TTSpacing.sm)
         .padding(.vertical, TTSpacing.xxs)
         .background(TTColor.forCategory(category).opacity(0.15))
-        .foregroundColor(TTColor.forCategory(category))
+        .foregroundColor(.ttText)
         .clipShape(Capsule())
     }
 }
@@ -292,7 +292,7 @@ struct ImportanceBadge: View {
             .padding(.horizontal, TTSpacing.xs)
             .padding(.vertical, 3)
             .background(importance == .critical ? Color.ttWarning.opacity(0.15) : Color.ttSecondaryLight)
-            .foregroundColor(importance == .critical ? .ttWarning : .ttTextSecondary)
+            .foregroundColor(importance == .critical ? .ttText : .ttTextSecondary)
             .clipShape(Capsule())
         }
     }
@@ -308,7 +308,7 @@ struct LowEnergyBadge: View {
         .padding(.horizontal, TTSpacing.xs)
         .padding(.vertical, 3)
         .background(Color.ttPrimaryLight.opacity(0.2))
-        .foregroundColor(.ttPrimary)
+        .foregroundColor(.ttPrimaryInteractive)
         .clipShape(Capsule())
     }
 }

@@ -57,7 +57,7 @@ struct DogProfileView: View {
                     }
 
                     Toggle("Program Dog", isOn: $isProgramDog)
-                        .tint(.ttPrimary)
+                        .tint(.ttPrimaryInteractive)
                 }
                 .listRowBackground(Color.ttSurface)
 
@@ -82,7 +82,7 @@ struct DogProfileView: View {
                             Spacer()
                             Text(isSaved ? "✓ Saved" : "Save Changes")
                                 .font(TTFont.headline)
-                                .foregroundColor(isSaved ? .ttSuccess : .ttPrimary)
+                                .foregroundColor(isSaved ? .ttSuccess : .ttPrimaryInteractive)
                             Spacer()
                         }
                     }
@@ -118,7 +118,7 @@ struct DogProfileView: View {
                     } else {
                         Image(systemName: "pawprint.fill")
                             .font(.system(size: 40))
-                            .foregroundColor(.ttPrimaryLight)
+                            .foregroundColor(.ttTextSecondary)
                     }
                 }
                 .frame(width: 100, height: 100)
@@ -129,7 +129,7 @@ struct DogProfileView: View {
                 PhotosPicker(selection: $selectedPhoto, matching: .images) {
                     Text("Change Photo")
                         .font(TTFont.caption)
-                        .foregroundColor(.ttPrimary)
+                        .foregroundColor(.ttPrimaryInteractive)
                 }
             }
             Spacer()

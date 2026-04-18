@@ -47,7 +47,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Image(systemName: "link.badge.plus")
-                                    .foregroundColor(.ttPrimary)
+                                    .foregroundColor(.ttPrimaryInteractive)
                                 Text("Import Trainer Curriculum")
                                     .foregroundColor(.ttText)
                             }
@@ -143,7 +143,7 @@ struct SettingsView: View {
                     .frame(width: 44, height: 44)
                     .overlay(
                         Image(systemName: "pawprint.fill")
-                            .foregroundColor(.ttPrimaryLight)
+                            .foregroundColor(.ttText)
                     )
             }
             VStack(alignment: .leading, spacing: 2) {
@@ -164,7 +164,7 @@ struct SettingsView: View {
     private var notificationStatusRow: some View {
         HStack {
             Image(systemName: notificationManager.isAuthorized ? "bell.fill" : "bell.slash")
-                .foregroundColor(notificationManager.isAuthorized ? .ttPrimary : .ttTextSecondary)
+                .foregroundColor(notificationManager.isAuthorized ? .ttPrimaryInteractive : .ttTextSecondary)
             Text(notificationManager.isAuthorized
                  ? "Reminders enabled"
                  : "Reminders are off")
@@ -176,7 +176,7 @@ struct SettingsView: View {
                     notificationManager.requestAuthorization()
                 }
                 .font(TTFont.bodySmall)
-                .foregroundColor(.ttPrimary)
+                .foregroundColor(.ttPrimaryInteractive)
             }
         }
     }
@@ -186,7 +186,7 @@ struct SettingsView: View {
     private func settingsRow(icon: String, label: String) -> some View {
         HStack(spacing: TTSpacing.sm) {
             Image(systemName: icon)
-                .foregroundColor(.ttPrimary)
+                .foregroundColor(.ttPrimaryInteractive)
                 .frame(width: 24)
             Text(label)
                 .font(TTFont.body)
@@ -231,7 +231,7 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { showingDisclaimer = false }.foregroundColor(.ttPrimary)
+                    Button("Done") { showingDisclaimer = false }.foregroundColor(.ttPrimaryInteractive)
                 }
             }
         }
@@ -260,7 +260,7 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { showingPrivacy = false }.foregroundColor(.ttPrimary)
+                    Button("Done") { showingPrivacy = false }.foregroundColor(.ttPrimaryInteractive)
                 }
             }
         }

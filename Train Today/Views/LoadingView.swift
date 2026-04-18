@@ -20,7 +20,7 @@ struct LoadingView: View {
                 // Paw print icon
                 Image(systemName: "pawprint.fill")
                     .font(.system(size: 56, weight: .regular))
-                    .foregroundColor(TTColor.primary)
+                    .foregroundColor(TTColor.primaryInteractive)
                     .opacity(pawOpacity)
                     .scaleEffect(pawScale)
 
@@ -39,7 +39,7 @@ struct LoadingView: View {
 
                 // Spinner
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: TTColor.primary))
+                    .progressViewStyle(CircularProgressViewStyle(tint: TTColor.primaryInteractive))
                     .scaleEffect(1.2)
                     .padding(.top, TTSpacing.sm)
                     .opacity(pawOpacity)

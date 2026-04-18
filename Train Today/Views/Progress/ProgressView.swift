@@ -67,13 +67,13 @@ struct ProgressView: View {
                 value: "\(SchedulingEngine.currentStreak(sessions: Array(sessions)))",
                 label: "Day Streak",
                 icon: "flame.fill",
-                color: .ttWarning
+                color: TTColor.primaryInteractive
             )
             statTile(
                 value: "\(sessions.count)",
                 label: "Total Sessions",
                 icon: "checkmark.circle.fill",
-                color: .ttPrimary
+                color: TTColor.primaryInteractive
             )
             statTile(
                 value: totalMinutesLabel,
@@ -129,7 +129,7 @@ struct ProgressView: View {
         return VStack(alignment: .leading, spacing: TTSpacing.xs) {
             HStack {
                 Image(systemName: category.icon)
-                    .foregroundColor(TTColor.forCategory(category))
+                    .foregroundColor(.ttText)
                 Spacer()
             }
             Text(category.shortName)
@@ -179,7 +179,7 @@ struct ProgressView: View {
                         .font(TTFont.bodySmall)
                         .padding(.horizontal, TTSpacing.sm)
                         .padding(.vertical, TTSpacing.xxs + 2)
-                        .background(selectedFilter == filter ? Color.ttPrimary : Color.ttSecondaryLight)
+                        .background(selectedFilter == filter ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                         .foregroundColor(selectedFilter == filter ? .white : .ttText)
                         .clipShape(Capsule())
                     }
@@ -256,7 +256,7 @@ struct SessionHistoryRow: View {
                             .foregroundColor(.ttSecondaryLight)
                         Text("Quick Win")
                             .font(TTFont.caption)
-                            .foregroundColor(.ttPrimary)
+                            .foregroundColor(.ttPrimaryInteractive)
                     }
                 }
             }

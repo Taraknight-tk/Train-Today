@@ -31,6 +31,10 @@ enum TTColor {
     /// Deep sage / lighter sage — confirmation, success states
     static let success         = Color("ttSuccess")
 
+    /// Accessible dark sage — replaces ttPrimary for all interactive text, icons, and button fills.
+    /// White text on this color: 5.98:1. On ttBackground cream: 5.27:1. Both pass WCAG 2.1 AA.
+    static let primaryInteractive = Color(red: 56/255, green: 111/255, blue: 63/255) // #386F3F
+
     // MARK: Category Colors
     static let obedience       = Color("ttObedience")    // Sage green — adaptive
     static let publicAccess    = Color("ttPublicAccess") // Dusty blue — adaptive
@@ -49,6 +53,11 @@ enum TTColor {
 
 
 // MARK: Hex Color Helper
+extension Color {
+    /// Accessible dark sage — use in place of .ttPrimary for any text, icon, or button fill role.
+    static var ttPrimaryInteractive: Color { TTColor.primaryInteractive }
+}
+
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -160,7 +169,7 @@ struct TTPrimaryButtonStyle: ButtonStyle {
             .padding(.vertical, TTSpacing.sm)
             .background(
                 RoundedRectangle(cornerRadius: TTRadius.md)
-                    .fill(isDestructive ? TTColor.error : TTColor.primary)
+                    .fill(isDestructive ? TTColor.error : TTColor.primaryInteractive)
                     .opacity(configuration.isPressed ? 0.85 : 1.0)
             )
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
@@ -172,12 +181,12 @@ struct TTSecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(TTFont.headline)
-            .foregroundColor(TTColor.primary)
+            .foregroundColor(TTColor.primaryInteractive)
             .frame(maxWidth: .infinity)
             .padding(.vertical, TTSpacing.sm)
             .background(
                 RoundedRectangle(cornerRadius: TTRadius.md)
-                    .strokeBorder(TTColor.primary, lineWidth: 1.5)
+                    .strokeBorder(TTColor.primaryInteractive, lineWidth: 1.5)
             )
             .opacity(configuration.isPressed ? 0.7 : 1.0)
             .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)

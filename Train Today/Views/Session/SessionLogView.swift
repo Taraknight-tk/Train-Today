@@ -127,7 +127,7 @@ struct SessionLogView: View {
             // Checkmark / toggle indicator
             Button(action: isToggleable ? onToggle : {}) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(isCompleted ? .ttPrimary : .ttSecondaryLight)
+                    .foregroundColor(isCompleted ? .ttPrimaryInteractive : .ttSecondaryLight)
                     .font(.title3)
             }
             .buttonStyle(.plain)
@@ -146,7 +146,7 @@ struct SessionLogView: View {
                         .foregroundColor(.ttTextSecondary)
                     Text("· \(label)")
                         .font(TTFont.bodySmall)
-                        .foregroundColor(isCompleted ? .ttPrimary : .ttTextSecondary)
+                        .foregroundColor(isCompleted ? .ttPrimaryInteractive : .ttTextSecondary)
                 }
             }
             Spacer()
@@ -183,7 +183,7 @@ struct SessionLogView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, TTSpacing.sm)
-            .background(selectedRating == rating ? Color.ttPrimary : Color.ttSecondaryLight)
+            .background(selectedRating == rating ? TTColor.primaryInteractive : Color.ttSecondaryLight)
             .clipShape(RoundedRectangle(cornerRadius: TTRadius.md))
         }
         .buttonStyle(.plain)

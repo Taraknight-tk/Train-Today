@@ -114,7 +114,7 @@ struct HomeView: View {
                 .font(.title2)
             Text("\(streak)")
                 .font(TTFont.headline)
-                .foregroundColor(.ttPrimary)
+                .foregroundColor(.ttPrimaryInteractive)
             Text(streak == 1 ? "day" : "days")
                 .font(TTFont.caption)
                 .foregroundColor(.ttTextSecondary)
@@ -143,7 +143,7 @@ struct HomeView: View {
                 Spacer()
                 Image(systemName: "bolt.fill")
                     .font(.title2)
-                    .foregroundColor(.ttPrimary)
+                    .foregroundColor(.ttPrimaryInteractive)
             }
             .ttCard()
         }
@@ -200,7 +200,7 @@ struct HomeView: View {
                 ForEach(overdue) { skill in
                     HStack(spacing: TTSpacing.xs) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.ttWarning)
+                            .foregroundColor(.ttText)
                         Text("\(skill.name) is overdue (Critical · \(skill.recencyLabel))")
                             .font(TTFont.bodySmall)
                             .foregroundColor(.ttText)
@@ -273,7 +273,7 @@ struct SessionDurationPicker: View {
                 .font(TTFont.bodySmall)
                 .padding(.horizontal, TTSpacing.sm)
                 .padding(.vertical, TTSpacing.xxs + 2)
-                .background(selected == duration ? Color.ttPrimary : Color.ttSecondaryLight)
+                .background(selected == duration ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                 .foregroundColor(selected == duration ? .white : .ttText)
                 .clipShape(Capsule())
             }
@@ -297,7 +297,7 @@ struct EnergyPicker: View {
                     }
                     .padding(.horizontal, TTSpacing.sm)
                     .padding(.vertical, TTSpacing.xxs + 2)
-                    .background(selected == level ? Color.ttPrimary : Color.ttSecondaryLight)
+                    .background(selected == level ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                     .foregroundColor(selected == level ? .white : .ttText)
                     .clipShape(Capsule())
                 }
@@ -323,7 +323,7 @@ struct LocationPicker: View {
                         }
                         .padding(.horizontal, TTSpacing.sm)
                         .padding(.vertical, TTSpacing.xxs + 2)
-                        .background(selected == env ? Color.ttPrimary : Color.ttSecondaryLight)
+                        .background(selected == env ? TTColor.primaryInteractive : Color.ttSecondaryLight)
                         .foregroundColor(selected == env ? .white : .ttText)
                         .clipShape(Capsule())
                     }
